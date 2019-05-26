@@ -13,8 +13,7 @@ import (
 func readDate(conn net.Conn) (msg commen.Message, err error) {
 	buf := make([]byte, 10240)
 
-	fmt.Println("read data from client!")
-	// 读取小心长度信息
+	// 读取消息长度信息
 	n, err := conn.Read(buf[:4])
 	if err != nil {
 		return
@@ -34,13 +33,42 @@ func readDate(conn net.Conn) (msg commen.Message, err error) {
 		return
 	}
 
+	// 从 conn 中解析消息并存放到 msg 中，此处一定传递的是 msg 的地址
 	err = json.Unmarshal(buf[:dataLen], &msg)
 	if err != nil {
 		fmt.Printf("json.Unmarshl error: %v", err)
 	}
-
-	fmt.Printf("login message: %v", msg)
 	return
+}
+
+func login(userID int, passWord string) bool {
+	// 判断用户名和密码
+	return userID == 100 && passWord == "123"
+}
+
+func dealWithLoginMessage(message string) {
+	var info commen.LoginMessage
+	err := json.Unmarshal([]byte(message), &info)
+	if err != nil {
+		fmt.Printf("get login message: %v\n", err)
+	}
+
+	if login(info.UserID, info.Password) {
+		fmt.Printf("login succeed！\n")
+	} else {
+		fmt.Printf("login failed！\n")
+	}
+}
+
+func dealWithMessage(message commen.Message) {
+	switch message.Type {
+	case commen.LoginMessageType:
+		dealWithLoginMessage(message.Data)
+	case commen.ResponseMessageType:
+		fmt.Println(commen.ResponseMessageType)
+	default:
+		fmt.Printf("other type")
+	}
 }
 
 func dialogue(conn net.Conn) {
@@ -48,7 +76,7 @@ func dialogue(conn net.Conn) {
 
 	// 循环的读取客户端的信息
 	for {
-		_, err := readDate(conn)
+		message, err := readDate(conn)
 		if err != nil {
 			if err == io.EOF {
 				fmt.Printf("client closed!\n")
@@ -56,14 +84,15 @@ func dialogue(conn net.Conn) {
 			}
 			fmt.Printf("get login message error: %v", err)
 		}
+		dealWithMessage(message)
 	}
 }
 
 func main() {
 	fmt.Printf("服务端启动成功\n")
+
 	listenr, err := net.Listen("tcp", "0.0.0.0:8888")
 	defer listenr.Close()
-
 	if err != nil {
 		fmt.Printf("some error when run server, error: %v", err)
 	}

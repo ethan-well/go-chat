@@ -8,19 +8,17 @@ import (
 	"net"
 )
 
-func login(userID int, password string) error {
-	fmt.Printf("userID: %v, password: %v\n", userID, password)
-
+func login(userID int, password string) (err error) {
+	// 链接服务器
 	conn, err := net.Dial("tcp", "localhost:8888")
 	defer conn.Close()
 	if err != nil {
 		fmt.Printf("connect server error: %v", err)
-		return err
+		return
 	}
 
 	var message commen.Message
 	message.Type = commen.LoginMessageType
-
 	// 生成 loginMessage
 	var loginMessage commen.LoginMessage
 	loginMessage.UserID = userID
@@ -37,10 +35,7 @@ func login(userID int, password string) error {
 	// 将一个字符串的长度转为一个表示长度的切片
 	message.Data = string(data)
 	message.Type = commen.LoginMessageType
-	fmt.Printf("login message parse: %v", message)
-	fmt.Printf("message: %v\n", message)
 	data, _ = json.Marshal(message)
-	fmt.Printf("message parse: %v\n", data)
 
 	var dataLen uint32
 	dataLen = uint32(len(data))
