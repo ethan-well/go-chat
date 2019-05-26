@@ -75,6 +75,41 @@ func dealWithMessage(message commen.Message) (code int, err error) {
 	return
 }
 
+func responseClient(conn net.Conn, code int, err error) {
+	var responseMessage commen.ResponseMessage
+	responseMessage.Code = code
+	if err != nil {
+		responseMessage.Error = fmt.Sprintf("login error: %v", err)
+	}
+
+	responseData, err := json.Marshal(responseMessage)
+	if err != nil {
+		fmt.Printf("some error when generate response message, error: %v", err)
+	}
+
+	// 将 response message 的长度处理后传给客户端
+	var dataLen uint32
+	dataLen = uint32(len(responseData))
+	var bytes [4]byte
+	binary.BigEndian.PutUint32(bytes[0:4], dataLen)
+
+	// 将消息长度发送给客户端
+	writeLen, err := conn.Write(responseData)
+	if err != nil {
+		fmt.Printf("send data length to server error: %v\n", err)
+		return
+	}
+	fmt.Printf("writeLen: %v", writeLen)
+
+	// 发送消息本身给客户端
+	_, err = conn.Write(responseData)
+	if err != nil {
+		fmt.Printf("send data length to server error: %v", err)
+		return
+	}
+	return
+}
+
 func dialogue(conn net.Conn) {
 	defer conn.Close()
 
@@ -89,12 +124,9 @@ func dialogue(conn net.Conn) {
 			fmt.Printf("get login message error: %v", err)
 		}
 		code, err := dealWithMessage(message)
-		if err != nil {
-			// 返回错误消息给客户端
-			fmt.Printf("some error")
-		}
 		// 返回状态码给客户端
-		fmt.Printf("code: %v, err: $v", code, err)
+
+		responseClient(conn, code, err)
 	}
 }
 
