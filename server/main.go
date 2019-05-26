@@ -46,29 +46,33 @@ func login(userID int, passWord string) bool {
 	return userID == 100 && passWord == "123"
 }
 
-func dealWithLoginMessage(message string) {
+func dealWithLoginMessage(message string) (code int, err error) {
 	var info commen.LoginMessage
-	err := json.Unmarshal([]byte(message), &info)
+	err = json.Unmarshal([]byte(message), &info)
 	if err != nil {
-		fmt.Printf("get login message: %v\n", err)
+		code = commen.ServerError
 	}
 
 	if login(info.UserID, info.Password) {
-		fmt.Printf("login succeed！\n")
+		code = commen.LoginSucceed
 	} else {
-		fmt.Printf("login failed！\n")
+		code = commen.LoginError
 	}
+	return
 }
 
-func dealWithMessage(message commen.Message) {
+// 处理消息
+// 根据消息的类型，使用对应的处理方式
+func dealWithMessage(message commen.Message) (code int, err error) {
 	switch message.Type {
 	case commen.LoginMessageType:
-		dealWithLoginMessage(message.Data)
+		code, err = dealWithLoginMessage(message.Data)
 	case commen.ResponseMessageType:
 		fmt.Println(commen.ResponseMessageType)
 	default:
 		fmt.Printf("other type")
 	}
+	return
 }
 
 func dialogue(conn net.Conn) {
@@ -84,7 +88,13 @@ func dialogue(conn net.Conn) {
 			}
 			fmt.Printf("get login message error: %v", err)
 		}
-		dealWithMessage(message)
+		code, err := dealWithMessage(message)
+		if err != nil {
+			// 返回错误消息给客户端
+			fmt.Printf("some error")
+		}
+		// 返回状态码给客户端
+		fmt.Printf("code: %v, err: $v", code, err)
 	}
 }
 

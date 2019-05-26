@@ -3,6 +3,11 @@ package commen
 const (
 	LoginMessageType    = "LoginMessage"
 	ResponseMessageType = "ResponseMessage"
+
+	ServerError  = 500
+	LoginError   = 403
+	NotExit      = 404
+	LoginSucceed = 200
 )
 
 type Message struct {
