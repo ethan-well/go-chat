@@ -35,16 +35,32 @@ func login(userID int, password string) error {
 
 	// 首先发送数据 data 的长度到服务器端
 	// 将一个字符串的长度转为一个表示长度的切片
+	message.Data = string(data)
+	message.Type = commen.LoginMessageType
+	fmt.Printf("login message parse: %v", message)
+	fmt.Printf("message: %v\n", message)
+	data, _ = json.Marshal(message)
+	fmt.Printf("message parse: %v\n", data)
+
 	var dataLen uint32
 	dataLen = uint32(len(data))
 	var bytes [4]byte
 	binary.BigEndian.PutUint32(bytes[0:4], dataLen)
 
+	// 客户端发送消息长度
 	writeLen, err := conn.Write(bytes[:])
 	if writeLen != 4 || err != nil {
+		fmt.Printf("send data to server error: %v", err)
+		return err
+	}
+
+	//客户端发送消息本身
+	writeLen, err = conn.Write(data)
+	if err != nil {
 		fmt.Printf("send data length to server error: %v", err)
 		return err
 	}
-	fmt.Printf("data lenth: %v", len(data))
+
+	// 接受服务端的返回
 	return nil
 }
