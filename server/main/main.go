@@ -4,30 +4,31 @@ import (
 	"encoding/json"
 	"fmt"
 	commen "go-chat/commen/message"
+	"go-chat/server/process"
 	"go-chat/server/utils"
 	"io"
 	"net"
 )
 
-func login(userID int, passWord string) bool {
-	// 判断用户名和密码
-	return userID == 100 && passWord == "123"
-}
+// func login(userID int, passWord string) bool {
+// 	// 判断用户名和密码
+// 	return userID == 100 && passWord == "123"
+// }
 
-func dealWithLoginMessage(message string) (code int, err error) {
-	var info commen.LoginMessage
-	err = json.Unmarshal([]byte(message), &info)
-	if err != nil {
-		code = commen.ServerError
-	}
+// func dealWithLoginMessage(message string) (code int, err error) {
+// 	var info commen.LoginMessage
+// 	err = json.Unmarshal([]byte(message), &info)
+// 	if err != nil {
+// 		code = commen.ServerError
+// 	}
 
-	if login(info.UserID, info.Password) {
-		code = commen.LoginSucceed
-	} else {
-		code = commen.LoginError
-	}
-	return
-}
+// 	if login(info.UserID, info.Password) {
+// 		code = commen.LoginSucceed
+// 	} else {
+// 		code = commen.LoginError
+// 	}
+// 	return
+// }
 
 func responseClient(conn net.Conn, code int, err error) {
 	var responseMessage commen.ResponseMessage
@@ -60,7 +61,7 @@ func dialogue(conn net.Conn) {
 			fmt.Printf("get login message error: %v", err)
 		}
 		// code, err := dealWithMessage(message)
-		code, err := process(message)
+		code, err := process.MessgeProcess(message)
 		// 返回状态码给客户端
 
 		responseClient(conn, code, err)

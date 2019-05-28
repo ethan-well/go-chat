@@ -1,4 +1,4 @@
-package main
+package process
 
 import (
 	"fmt"
@@ -7,10 +7,10 @@ import (
 
 // 处理消息
 // 根据消息的类型，使用对应的处理方式
-func process(message commen.Message) (code int, err error) {
+func MessgeProcess(message commen.Message) (code int, err error) {
 	switch message.Type {
 	case commen.LoginMessageType:
-		code, err = dealWithLoginMessage(message.Data)
+		code, err = userLogin(message.Data)
 	case commen.ResponseMessageType:
 		fmt.Println(commen.ResponseMessageType)
 	default:
