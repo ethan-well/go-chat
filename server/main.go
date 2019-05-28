@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	commen "go-chat/commen/message"
@@ -56,27 +55,29 @@ func responseClient(conn net.Conn, code int, err error) {
 		fmt.Printf("some error when generate response message, error: %v", err)
 	}
 
-	// 将 response message 的长度处理后传给客户端
-	var dataLen uint32
-	dataLen = uint32(len(responseData))
-	var bytes [4]byte
-	binary.BigEndian.PutUint32(bytes[0:4], dataLen)
+	// // 将 response message 的长度处理后传给客户端
+	// var dataLen uint32
+	// dataLen = uint32(len(responseData))
+	// var bytes [4]byte
+	// binary.BigEndian.PutUint32(bytes[0:4], dataLen)
 
-	// 将消息长度发送给客户端
-	writeLen, err := conn.Write(bytes[:])
-	if err != nil {
-		fmt.Printf("send data length to server error: %v\n", err)
-		return
-	}
-	fmt.Printf("writeLen: %v", writeLen)
+	// // 将消息长度发送给客户端
+	// writeLen, err := conn.Write(bytes[:])
+	// if err != nil {
+	// 	fmt.Printf("send data length to server error: %v\n", err)
+	// 	return
+	// }
+	// fmt.Printf("writeLen: %v", writeLen)
 
-	// 发送消息本身给客户端
-	_, err = conn.Write(responseData)
-	if err != nil {
-		fmt.Printf("send data length to server error: %v", err)
-		return
-	}
-	return
+	// // 发送消息本身给客户端
+	// _, err = conn.Write(responseData)
+	// if err != nil {
+	// 	fmt.Printf("send data length to server error: %v", err)
+	// 	return
+	// }
+
+	dispatcher := utils.Dispatcher{Conn: conn}
+	err = dispatcher.WirteData(responseData)
 }
 
 func dialogue(conn net.Conn) {
