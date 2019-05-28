@@ -3,10 +3,42 @@ package main
 import (
 	"encoding/binary"
 	"encoding/json"
+	"errors"
 	"fmt"
 	commen "go-chat/commen/message"
 	"net"
 )
+
+func readDate(conn net.Conn) (msg commen.ResponseMessage, err error) {
+	buf := make([]byte, 10240)
+
+	// 读取消息长度信息
+	n, err := conn.Read(buf[:4])
+	if err != nil {
+		return
+	}
+	var dataLen uint32
+	dataLen = binary.BigEndian.Uint32(buf[0:4])
+
+	// 读取消息本身
+	n, err = conn.Read(buf[:dataLen])
+	if err != nil {
+		fmt.Printf("server read data login data error: %v", err)
+	}
+
+	// 对比消息本身的长度和期望长度是否匹配
+	if n != int(dataLen) {
+		err = errors.New("login message length error")
+		return
+	}
+
+	// 从 conn 中解析消息并存放到 msg 中，此处一定传递的是 msg 的地址
+	err = json.Unmarshal(buf[:dataLen], &msg)
+	if err != nil {
+		fmt.Printf("json.Unmarshl error: %v", err)
+	}
+	return
+}
 
 func login(userID int, password string) (err error) {
 	// 链接服务器
@@ -46,16 +78,28 @@ func login(userID int, password string) (err error) {
 	writeLen, err := conn.Write(bytes[:])
 	if writeLen != 4 || err != nil {
 		fmt.Printf("send data to server error: %v", err)
-		return err
+		return
 	}
 
 	//客户端发送消息本身
 	writeLen, err = conn.Write(data)
 	if err != nil {
 		fmt.Printf("send data length to server error: %v", err)
-		return err
+		return
 	}
 
-	// 接受服务端的返回
-	return nil
+	// 接受服务端返回
+	fmt.Printf("等待服务端返回...\n")
+	var responseMsg commen.ResponseMessage
+	responseMsg, err = readDate(conn)
+	if err != nil {
+		fmt.Printf("read response error")
+		return
+	}
+
+	if responseMsg.Code != 200 {
+		err = errors.New("login error")
+	}
+
+	return
 }

@@ -94,7 +94,7 @@ func responseClient(conn net.Conn, code int, err error) {
 	binary.BigEndian.PutUint32(bytes[0:4], dataLen)
 
 	// 将消息长度发送给客户端
-	writeLen, err := conn.Write(responseData)
+	writeLen, err := conn.Write(bytes[:])
 	if err != nil {
 		fmt.Printf("send data length to server error: %v\n", err)
 		return
@@ -140,7 +140,7 @@ func main() {
 	}
 
 	for {
-		fmt.Printf("等待客户端的连接......\n")
+		fmt.Printf("等待客户端的连接...\n")
 
 		conn, err := listenr.Accept()
 		if err != nil {

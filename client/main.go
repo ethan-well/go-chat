@@ -5,6 +5,9 @@ import "fmt"
 func main() {
 	var key int
 	var loop = true
+	var userID int
+	var password string
+
 	for loop {
 		fmt.Println("----------------欢迎使用多人聊天系统--------------")
 		fmt.Println("\t\t请选择操作类型，选择 1、2、3")
@@ -17,6 +20,18 @@ func main() {
 		switch key {
 		case 1:
 			fmt.Println("登陆聊天室")
+
+			fmt.Println("请输入用户的id:")
+			fmt.Scanf("%d\n", &userID)
+			fmt.Println("输入用户密码:")
+			fmt.Scanf("%s\n", &password)
+
+			err := login(userID, password)
+			if err != nil {
+				fmt.Printf("登陆失败")
+			} else {
+				fmt.Printf("登陆成功")
+			}
 			loop = false
 		case 2:
 			fmt.Println("注册聊天室")
@@ -26,22 +41,6 @@ func main() {
 			loop = false // 等价 os.Exit(0)
 		default:
 			fmt.Printf("输入错误，请储物1、2、3\n")
-		}
-	}
-
-	var userID int
-	var password string
-	if key == 1 {
-		fmt.Println("请输入用户的id:")
-		fmt.Scanf("%d\n", &userID)
-		fmt.Println("输入用户密码:")
-		fmt.Scanf("%s\n", &password)
-
-		err := login(userID, password)
-		if err != nil {
-			fmt.Printf("登陆失败")
-		} else {
-			fmt.Printf("登陆成功")
 		}
 	}
 }
