@@ -16,7 +16,7 @@ type Message struct {
 }
 
 type LoginMessage struct {
-	UserID   int
+	UserName string
 	Password string
 }
 

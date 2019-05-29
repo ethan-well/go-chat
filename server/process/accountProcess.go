@@ -6,9 +6,9 @@ import (
 	"go-chat/server/model"
 )
 
-func login(userID int, passWord string) (user model.User, err error) {
+func login(userName, passWord string) (user model.User, err error) {
 	// 判断用户名和密码
-	user, err = model.CurrentUserDao.Login(userID, passWord)
+	user, err = model.CurrentUserDao.Login(userName, passWord)
 	return
 }
 
@@ -19,7 +19,7 @@ func userLogin(message string) (code int, err error) {
 		code = commen.ServerError
 	}
 
-	_, err = login(info.UserID, info.Password)
+	_, err = login(info.UserName, info.Password)
 	switch err {
 	case nil:
 		code = commen.LoginSucceed

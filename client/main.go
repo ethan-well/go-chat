@@ -3,10 +3,12 @@ package main
 import "fmt"
 
 func main() {
-	var key int
-	var loop = true
-	var userID int
-	var password string
+	var (
+		key      int
+		loop     = true
+		userName string
+		password string
+	)
 
 	for loop {
 		fmt.Println("----------------欢迎使用多人聊天系统--------------")
@@ -21,12 +23,12 @@ func main() {
 		case 1:
 			fmt.Println("登陆聊天室")
 
-			fmt.Println("请输入用户的id:")
-			fmt.Scanf("%d\n", &userID)
+			fmt.Println("请输入用户名:")
+			fmt.Scanf("%s\n", &userName)
 			fmt.Println("输入用户密码:")
 			fmt.Scanf("%s\n", &password)
 
-			err := login(userID, password)
+			err := login(userName, password)
 			if err != nil {
 				fmt.Printf("Login failed: %v\n", err)
 			} else {

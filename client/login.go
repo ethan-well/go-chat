@@ -40,7 +40,7 @@ func readDate(conn net.Conn) (msg commen.ResponseMessage, err error) {
 	return
 }
 
-func login(userID int, password string) (err error) {
+func login(userName, password string) (err error) {
 	// 链接服务器
 	conn, err := net.Dial("tcp", "localhost:8888")
 	defer conn.Close()
@@ -53,7 +53,7 @@ func login(userID int, password string) (err error) {
 	message.Type = commen.LoginMessageType
 	// 生成 loginMessage
 	var loginMessage commen.LoginMessage
-	loginMessage.UserID = userID
+	loginMessage.UserName = userName
 	loginMessage.Password = password
 
 	// func Marshal(v interface{}) ([]byte, error)
