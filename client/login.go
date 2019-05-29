@@ -89,16 +89,24 @@ func login(userID int, password string) (err error) {
 	}
 
 	// 接受服务端返回
-	fmt.Printf("等待服务端返回...\n")
 	var responseMsg commen.ResponseMessage
 	responseMsg, err = readDate(conn)
 	if err != nil {
-		fmt.Printf("read response error")
+		fmt.Printf("some error, retry please!\n")
 		return
 	}
 
-	if responseMsg.Code != 200 {
-		err = errors.New("login error")
+	switch responseMsg.Code {
+	case 200:
+		fmt.Printf("Loggin succeed!")
+	case 500:
+		err = errors.New("server error")
+	case 404:
+		err = errors.New("user not exist")
+	case 403:
+		err = errors.New("pasword not valide")
+	default:
+		err = errors.New("some error")
 	}
 
 	return

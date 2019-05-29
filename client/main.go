@@ -28,9 +28,9 @@ func main() {
 
 			err := login(userID, password)
 			if err != nil {
-				fmt.Printf("登陆失败")
+				fmt.Printf("Login failed: %v\n", err)
 			} else {
-				fmt.Printf("登陆成功")
+				fmt.Printf("Login succeed!\n")
 			}
 			loop = false
 		case 2:

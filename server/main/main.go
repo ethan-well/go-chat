@@ -4,31 +4,23 @@ import (
 	"encoding/json"
 	"fmt"
 	commen "go-chat/commen/message"
+	"go-chat/server/model"
 	"go-chat/server/process"
 	"go-chat/server/utils"
 	"io"
 	"net"
+	"time"
 )
 
-// func login(userID int, passWord string) bool {
-// 	// 判断用户名和密码
-// 	return userID == 100 && passWord == "123"
-// }
+func init() {
+	// 初始化 redis 连接池，全局唯一
+	initRedisPool(16, 0, time.Second*300, "127.0.0.1:6379")
 
-// func dealWithLoginMessage(message string) (code int, err error) {
-// 	var info commen.LoginMessage
-// 	err = json.Unmarshal([]byte(message), &info)
-// 	if err != nil {
-// 		code = commen.ServerError
-// 	}
-
-// 	if login(info.UserID, info.Password) {
-// 		code = commen.LoginSucceed
-// 	} else {
-// 		code = commen.LoginError
-// 	}
-// 	return
-// }
+	// 创建 userDao 用于操作用户信息
+	// 全局唯一 UserDao 实例：model.CurrentUserDao
+	//
+	model.CurrentUserDao = model.InitUserDao(pool)
+}
 
 func responseClient(conn net.Conn, code int, err error) {
 	var responseMessage commen.ResponseMessage
