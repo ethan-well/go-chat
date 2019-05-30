@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/binary"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -23,9 +24,8 @@ func register(userName, password, password_confirm string) (err error) {
 		return
 	}
 
-	// 定义消息类型
+	// 定义消息
 	var messsage commen.Message
-	messsage.Type = commen.RegisterMessageType
 
 	// 生成 registerMessage
 	var registerMessage commen.RegisterMessage
@@ -37,6 +37,26 @@ func register(userName, password, password_confirm string) (err error) {
 	if err != nil {
 		fmt.Printf("client soem error: %T")
 	}
+
+	// 构造需要传递给服务器的数据
+	messsage.Data = string(data)
+	messsage.Type = commen.RegisterMessageType
+	data, _ = json.Marshal(messsage)
+
+	// 发送消息长度
+	var dataLen uint32
+	dataLen = uint32(len(data))
+	var bytes [4]byte
+	binary.BigEndian.PutUint32(bytes[0:4], dataLen)
+
+	// 发送数据
+	_, err = conn.Write(bytes[:])
+	if err != nil {
+		fmt.Printf("some error")
+		return
+	}
+
+	// 接收服务器返回
 
 	return
 }
