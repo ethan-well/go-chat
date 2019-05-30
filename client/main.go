@@ -4,10 +4,11 @@ import "fmt"
 
 func main() {
 	var (
-		key      int
-		loop     = true
-		userName string
-		password string
+		key              int
+		loop             = true
+		userName         string
+		password         string
+		password_confirm string
 	)
 
 	for loop {
@@ -36,7 +37,19 @@ func main() {
 			}
 			loop = false
 		case 2:
-			fmt.Println("注册聊天室")
+			fmt.Println("Create account")
+			fmt.Println("user name：")
+			fmt.Scanf("%s\n", &userName)
+			fmt.Println("password：")
+			fmt.Scanf("%s\n", &password)
+			fmt.Println("password confirm：")
+			fmt.Scanf("%s\n", &password_confirm)
+			err := register(userName, password, password_confirm)
+			if err != nil {
+				fmt.Printf("Creae account failed")
+			} else {
+				fmt.Printf("succeed!")
+			}
 			loop = false
 		case 3:
 			fmt.Println("退出聊天室")
