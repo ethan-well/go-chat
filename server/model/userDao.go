@@ -47,6 +47,9 @@ func getUsrById(conn redis.Conn, id int) (user User, err error) {
 	return
 }
 
+// 根据用户 id 获取用户信息
+// 获取成功返回 user 信息，err nil
+// 获取失败返回 err，user 为 nil
 func getUsrByUserName(conn redis.Conn, userName string) (user User, err error) {
 	res, err := redis.String(conn.Do("hget", "users", userName))
 	if err != nil {
@@ -61,6 +64,8 @@ func getUsrByUserName(conn redis.Conn, userName string) (user User, err error) {
 	return
 }
 
+// 注册用户
+// 用户名不能重复
 func (this *UserDao) Register(userName, password string) (user User, err error) {
 	conn := this.pool.Get()
 	defer conn.Close()
