@@ -35,13 +35,18 @@ func register(userName, password, password_confirm string) (err error) {
 
 	data, err := json.Marshal(registerMessage)
 	if err != nil {
-		fmt.Printf("client soem error: %T")
+		fmt.Printf("client soem error: %v", err)
 	}
 
 	// 构造需要传递给服务器的数据
 	messsage.Data = string(data)
 	messsage.Type = commen.RegisterMessageType
-	data, _ = json.Marshal(messsage)
+
+	data, err = json.Marshal(messsage)
+	if err != nil {
+		fmt.Printf("registerMessage json Marshal error: %v", err)
+		return
+	}
 
 	// 发送消息长度
 	var dataLen uint32
@@ -49,14 +54,40 @@ func register(userName, password, password_confirm string) (err error) {
 	var bytes [4]byte
 	binary.BigEndian.PutUint32(bytes[0:4], dataLen)
 
-	// 发送数据
+	// 发送消息长度
 	_, err = conn.Write(bytes[:])
 	if err != nil {
 		fmt.Printf("some error")
 		return
 	}
 
+	//客户端发送消息本身
+	_, err = conn.Write(data)
+	if err != nil {
+		fmt.Printf("send data length to server error: %v", err)
+		return
+	}
+
 	// 接收服务器返回
+	var responseMsg commen.ResponseMessage
+	responseMsg, err = readDate(conn)
+	if err != nil {
+		fmt.Printf("some error, retry please!\n")
+		return
+	}
+
+	switch responseMsg.Code {
+	case 200:
+		fmt.Printf("Register succeed!\n")
+	case 500:
+		err = errors.New("server error")
+	case 403:
+		err = errors.New("user has already existed!")
+	case 402:
+		err = errors.New("pasword not match!")
+	default:
+		err = errors.New("some error")
+	}
 
 	return
 }

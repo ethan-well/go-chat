@@ -20,12 +20,18 @@ func (this *Processor) messgeProcess(message commen.Message) (err error) {
 		up := UserProcess{Conn: this.Conn}
 		err = up.UserLogin(message.Data)
 		if err != nil {
-			fmt.Printf("some error: %v", err)
+			fmt.Printf("some error: %v\n", err)
 		}
 	case commen.ResponseMessageType:
 		fmt.Println(commen.ResponseMessageType)
+	case commen.RegisterMessageType:
+		up := UserProcess{Conn: this.Conn}
+		err = up.UserRegister(message.Data)
+		if err != nil {
+			fmt.Printf("some error when register: %v\n", err)
+		}
 	default:
-		fmt.Printf("other type")
+		fmt.Printf("other type\n")
 	}
 	return
 }

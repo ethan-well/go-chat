@@ -29,6 +29,7 @@ func (dispatcher Dispatcher) ReadData() (message commen.Message, err error) {
 	n, err = dispatcher.Conn.Read(buf[:dataLen])
 	if err != nil {
 		fmt.Printf("server read data login data error: %v", err)
+		return
 	}
 
 	// 对比消息本身的长度和期望长度是否匹配
@@ -52,12 +53,11 @@ func (dispatcher Dispatcher) WirteData(data []byte) (err error) {
 	binary.BigEndian.PutUint32(bytes[0:4], dataLen)
 
 	// 将消息长度发送给客户端
-	writeLen, err := dispatcher.Conn.Write(bytes[:])
+	_, err = dispatcher.Conn.Write(bytes[:])
 	if err != nil {
 		fmt.Printf("send data length to server error: %v\n", err)
 		return
 	}
-	fmt.Printf("writeLen: %v", writeLen)
 
 	// 发送消息本身给客户端
 	_, err = dispatcher.Conn.Write(data)

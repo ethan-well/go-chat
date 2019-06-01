@@ -47,8 +47,6 @@ func main() {
 			err := register(userName, password, password_confirm)
 			if err != nil {
 				fmt.Printf("Creae account failed")
-			} else {
-				fmt.Printf("succeed!")
 			}
 			loop = false
 		case 3:

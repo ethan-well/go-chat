@@ -66,15 +66,21 @@ func getUsrByUserName(conn redis.Conn, userName string) (user User, err error) {
 
 // 注册用户
 // 用户名不能重复
-func (this *UserDao) Register(userName, password string) (user User, err error) {
+func (this *UserDao) Register(userName, password, passwordConfirm string) (user User, err error) {
 	conn := this.pool.Get()
 	defer conn.Close()
+
+	// 判断密码是否正确
+	if password != passwordConfirm {
+		err = ERROR_PASSWORD_NOT_MATCH
+		return
+	}
 
 	// 保证用户名不重复
 	user, err = getUsrByUserName(conn, userName)
 	if err == nil {
 		fmt.Printf("user name is existed!\n")
-		err = ERROR_USER_EXISTS
+		err = ERROR_USER_EXISTED
 		return
 	}
 

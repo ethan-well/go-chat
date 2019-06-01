@@ -5,10 +5,17 @@ const (
 	ResponseMessageType = "ResponseMessage"
 	RegisterMessageType = "RegisterMessage"
 
-	ServerError  = 500
+	ServerError = 500
+
+	// status code for login
 	LoginError   = 403
 	NotExit      = 404
 	LoginSucceed = 200
+
+	// status code for register
+	HaveExisted       = 403
+	RegisterSucceed   = 200
+	PassworldNotMatch = 402
 )
 
 type Message struct {
