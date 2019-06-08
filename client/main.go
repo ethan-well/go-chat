@@ -57,7 +57,7 @@ func main() {
 			}
 			loop = false
 		case 3:
-			fmt.Println("退出聊天室")
+			fmt.Println("退出聊天室...")
 			loop = false // 等价 os.Exit(0)
 		default:
 			fmt.Printf("输入错误，请储物1、2、3\n")

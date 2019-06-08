@@ -83,8 +83,7 @@ func (up UserProcess) Login(userName, password string) (err error) {
 	resErr := make(chan error, 1)
 	go Response(conn, c, resErr)
 	<-c
-	if rr := <-resErr; rr != nil {
-		fmt.Printf("%v", rr)
+	if err = <-resErr; err != nil {
 		return
 	}
 
@@ -145,8 +144,7 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 	resErr := make(chan error, 1)
 	go Response(conn, c, resErr)
 	<-c
-	if rr := <-resErr; rr != nil {
-		fmt.Printf("%v", rr)
-	}
+	err = <-resErr
+
 	return
 }
