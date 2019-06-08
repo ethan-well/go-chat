@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"go-chat/client/process"
+)
 
 func main() {
 	var (
@@ -29,13 +32,15 @@ func main() {
 			fmt.Println("输入用户密码:")
 			fmt.Scanf("%s\n", &password)
 
-			err := login(userName, password)
+			// err := login(userName, password)
+			up := process.UserProcess{}
+			err := up.Login(userName, password)
+
 			if err != nil {
 				fmt.Printf("Login failed: %v\n", err)
 			} else {
 				fmt.Printf("Login succeed!\n")
 			}
-			loop = false
 		case 2:
 			fmt.Println("Create account")
 			fmt.Println("user name：")
@@ -44,7 +49,9 @@ func main() {
 			fmt.Scanf("%s\n", &password)
 			fmt.Println("password confirm：")
 			fmt.Scanf("%s\n", &password_confirm)
-			err := register(userName, password, password_confirm)
+
+			up := process.UserProcess{}
+			err := up.Register(userName, password, password_confirm)
 			if err != nil {
 				fmt.Printf("Creae account failed")
 			}
