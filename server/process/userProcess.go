@@ -25,12 +25,10 @@ func login(userName, passWord string) (user model.User, err error) {
 }
 
 // 响应客户端
-func (this *UserProcess) responseClient(code int, err error) {
+func (this *UserProcess) responseClient(responseMessageType string, code int, err error) {
 	var responseMessage commen.ResponseMessage
 	responseMessage.Code = code
-	if err != nil {
-		responseMessage.Error = fmt.Sprintf("login error: %v", err)
-	}
+	responseMessage.Type = responseMessageType
 
 	responseData, err := json.Marshal(responseMessage)
 	if err != nil {
@@ -38,6 +36,7 @@ func (this *UserProcess) responseClient(code int, err error) {
 	}
 
 	dispatcher := utils.Dispatcher{Conn: this.Conn}
+
 	err = dispatcher.WirteData(responseData)
 }
 
@@ -60,7 +59,7 @@ func (this *UserProcess) UserRegister(message string) (err error) {
 	default:
 		code = 500
 	}
-	this.responseClient(code, err)
+	this.responseClient(commen.RegisterResponseMessageType, code, err)
 	return
 }
 
@@ -83,6 +82,6 @@ func (this *UserProcess) UserLogin(message string) (err error) {
 	default:
 		code = 500
 	}
-	this.responseClient(code, err)
+	this.responseClient(commen.LoginResponseMessageType, code, err)
 	return
 }

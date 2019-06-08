@@ -50,7 +50,6 @@ func (up UserProcess) Login(userName, password string) (err error) {
 
 	// 接受服务端返回
 	go Response(conn)
-
 	return
 }
 
@@ -62,7 +61,6 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 	}
 
 	conn, err := net.Dial("tcp", "localhost:8888")
-	defer conn.Close()
 
 	if err != nil {
 		fmt.Printf("connect server error: %v", err)
@@ -96,29 +94,11 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 	dispatcher := utils.Dispatcher{Conn: conn}
 	err = dispatcher.SendData(data)
 	if err != nil {
+		fmt.Printf("send data erro!\n")
 		return
 	}
 
-	// 接收服务器返回
-	var responseMsg commen.ResponseMessage
-	responseMsg, err = dispatcher.ReadDate()
-	if err != nil {
-		fmt.Printf("some error, retry please!\n")
-		return
-	}
-
-	switch responseMsg.Code {
-	case 200:
-		fmt.Printf("Register succeed!\n")
-	case 500:
-		err = errors.New("server error")
-	case 403:
-		err = errors.New("user has already existed!")
-	case 402:
-		err = errors.New("pasword not match!")
-	default:
-		err = errors.New("some error")
-	}
-
+	// 接受服务端返回
+	go Response(conn)
 	return
 }

@@ -22,8 +22,6 @@ func (this *Processor) messgeProcess(message commen.Message) (err error) {
 		if err != nil {
 			fmt.Printf("some error: %v\n", err)
 		}
-	case commen.ResponseMessageType:
-		fmt.Println(commen.ResponseMessageType)
 	case commen.RegisterMessageType:
 		up := UserProcess{Conn: this.Conn}
 		err = up.UserRegister(message.Data)

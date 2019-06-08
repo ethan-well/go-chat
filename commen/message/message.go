@@ -1,9 +1,10 @@
 package commen
 
 const (
-	LoginMessageType    = "LoginMessage"
-	ResponseMessageType = "ResponseMessage"
-	RegisterMessageType = "RegisterMessage"
+	LoginMessageType            = "LoginMessage"
+	RegisterMessageType         = "RegisterMessage"
+	LoginResponseMessageType    = "LoginResponseMessageType"
+	RegisterResponseMessageType = "ResponseMessageType"
 
 	ServerError = 500
 
@@ -29,6 +30,7 @@ type LoginMessage struct {
 }
 
 type ResponseMessage struct {
+	Type  string
 	Code  int    // 404 用户没找到， 403 账号或者密码错误, 200 登陆成功, 500 服务端错误
 	Error string // 错误消息
 }
