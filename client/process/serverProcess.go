@@ -11,7 +11,7 @@ import (
 func dealLoginResponse(responseMsg commen.ResponseMessage) (err error) {
 	switch responseMsg.Code {
 	case 200:
-		fmt.Printf("Loggin succeed!\n")
+		err = nil
 	case 500:
 		err = errors.New("server error")
 	case 404:
@@ -41,7 +41,7 @@ func dealRegisterResponse(responseMsg commen.ResponseMessage) (err error) {
 }
 
 // 处理服务端的返回
-func Response(conn net.Conn, c chan bool) (err error) {
+func Response(conn net.Conn, c chan bool, resErr chan error) (err error) {
 	defer conn.Close()
 	var responseMsg commen.ResponseMessage
 	dispatcher := utils.Dispatcher{Conn: conn}
@@ -49,6 +49,7 @@ func Response(conn net.Conn, c chan bool) (err error) {
 	responseMsg, err = dispatcher.ReadDate()
 	if err != nil {
 		fmt.Printf("some error, %v!\n", err)
+		resErr <- err
 		return
 	}
 
@@ -62,6 +63,7 @@ func Response(conn net.Conn, c chan bool) (err error) {
 			fmt.Printf("%v\n", err)
 		}
 	}
+	resErr <- err
 	c <- true
 
 	return

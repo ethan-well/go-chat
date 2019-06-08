@@ -15,11 +15,12 @@ type UserProcess struct{}
 // 登陆成功菜单显示：
 func showAfterLoginMenu() {
 
-	fmt.Println("-------login succeed!---------")
-	fmt.Println("-------1. Show all online users---------")
-	fmt.Println("-------2. Send message---------")
-	fmt.Println("-------3. Show history messsge---------")
-	fmt.Println("-------4. exist---------")
+	fmt.Println("----------------login succeed!----------------")
+	fmt.Println("\t\tselect what you want to do")
+	fmt.Println("\t\t1. Show all online users")
+	fmt.Println("\t\t2. Send message")
+	fmt.Println("\t\t3. Show history messsge")
+	fmt.Println("\t\t4. exist")
 	var key int
 	var content string
 
@@ -79,8 +80,13 @@ func (up UserProcess) Login(userName, password string) (err error) {
 
 	// 接受服务端返回
 	c := make(chan bool, 1)
-	go Response(conn, c)
+	resErr := make(chan error, 1)
+	go Response(conn, c, resErr)
 	<-c
+	if rr := <-resErr; rr != nil {
+		fmt.Printf("%v", rr)
+		return
+	}
 
 	for {
 		showAfterLoginMenu()
@@ -133,8 +139,14 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 	}
 
 	// 接受服务端返回
+	// 避免主 routine 提前返回
 	c := make(chan bool, 1)
-	go Response(conn, c)
+
+	resErr := make(chan error, 1)
+	go Response(conn, c, resErr)
 	<-c
+	if rr := <-resErr; rr != nil {
+		fmt.Printf("%v", rr)
+	}
 	return
 }
