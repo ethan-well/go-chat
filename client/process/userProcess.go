@@ -1,7 +1,6 @@
 package process
 
 import (
-	"encoding/binary"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -12,6 +11,7 @@ import (
 
 type UserProcess struct{}
 
+// 用户登陆
 func (up UserProcess) Login(userName, password string) (err error) {
 	// 链接服务器
 	conn, err := net.Dial("tcp", "localhost:8888")
@@ -42,28 +42,15 @@ func (up UserProcess) Login(userName, password string) (err error) {
 	message.Type = commen.LoginMessageType
 	data, _ = json.Marshal(message)
 
-	var dataLen uint32
-	dataLen = uint32(len(data))
-	var bytes [4]byte
-	binary.BigEndian.PutUint32(bytes[0:4], dataLen)
-
-	// 客户端发送消息长度
-	writeLen, err := conn.Write(bytes[:])
-	if writeLen != 4 || err != nil {
-		fmt.Printf("send data to server error: %v", err)
-		return
-	}
-
-	//客户端发送消息本身
-	writeLen, err = conn.Write(data)
+	dispatcher := utils.Dispatcher{Conn: conn}
+	err = dispatcher.SendData(data)
 	if err != nil {
-		fmt.Printf("send data length to server error: %v", err)
 		return
 	}
 
 	// 接受服务端返回
 	var responseMsg commen.ResponseMessage
-	dispatcher := utils.Dispatcher{Conn: conn}
+	dispatcher = utils.Dispatcher{Conn: conn}
 
 	responseMsg, err = dispatcher.ReadDate()
 	if err != nil {
@@ -126,29 +113,14 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 		return
 	}
 
-	// 发送消息长度
-	var dataLen uint32
-	dataLen = uint32(len(data))
-	var bytes [4]byte
-	binary.BigEndian.PutUint32(bytes[0:4], dataLen)
-
-	// 发送消息长度
-	_, err = conn.Write(bytes[:])
+	dispatcher := utils.Dispatcher{Conn: conn}
+	err = dispatcher.SendData(data)
 	if err != nil {
-		fmt.Printf("some error")
-		return
-	}
-
-	//客户端发送消息本身
-	_, err = conn.Write(data)
-	if err != nil {
-		fmt.Printf("send data length to server error: %v", err)
 		return
 	}
 
 	// 接收服务器返回
 	var responseMsg commen.ResponseMessage
-	dispatcher := utils.Dispatcher{Conn: conn}
 	responseMsg, err = dispatcher.ReadDate()
 	if err != nil {
 		fmt.Printf("some error, retry please!\n")

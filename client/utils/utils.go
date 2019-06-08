@@ -44,3 +44,26 @@ func (dispatcher Dispatcher) ReadDate() (msg commen.ResponseMessage, err error) 
 	}
 	return
 }
+
+func (dispatcher Dispatcher) SendData(data []byte) (err error) {
+	// 首先发送数据 data 的长度到服务器端
+	var dataLen uint32
+	dataLen = uint32(len(data))
+	var bytes [4]byte
+	binary.BigEndian.PutUint32(bytes[0:4], dataLen)
+
+	// 客户端发送消息长度
+	writeLen, err := dispatcher.Conn.Write(bytes[:])
+	if writeLen != 4 || err != nil {
+		fmt.Printf("send data to server error: %v", err)
+		return
+	}
+
+	//客户端发送消息本身
+	writeLen, err = dispatcher.Conn.Write(data)
+	if err != nil {
+		fmt.Printf("send data length to server error: %v", err)
+		return
+	}
+	return
+}
