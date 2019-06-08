@@ -41,7 +41,7 @@ func dealRegisterResponse(responseMsg commen.ResponseMessage) (err error) {
 }
 
 // 处理服务端的返回
-func Response(conn net.Conn) (err error) {
+func Response(conn net.Conn, c chan bool) (err error) {
 	defer conn.Close()
 	var responseMsg commen.ResponseMessage
 	dispatcher := utils.Dispatcher{Conn: conn}
@@ -62,6 +62,7 @@ func Response(conn net.Conn) (err error) {
 			fmt.Printf("%v\n", err)
 		}
 	}
+	c <- true
 
 	return
 }

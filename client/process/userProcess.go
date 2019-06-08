@@ -78,12 +78,13 @@ func (up UserProcess) Login(userName, password string) (err error) {
 	}
 
 	// 接受服务端返回
-	go Response(conn)
+	c := make(chan bool, 1)
+	go Response(conn, c)
+	<-c
 
 	for {
 		showAfterLoginMenu()
 	}
-	return
 }
 
 // 处理用户注册
@@ -132,6 +133,8 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 	}
 
 	// 接受服务端返回
-	go Response(conn)
+	c := make(chan bool, 1)
+	go Response(conn, c)
+	<-c
 	return
 }
