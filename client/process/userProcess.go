@@ -15,7 +15,7 @@ type UserProcess struct{}
 func (up UserProcess) Login(userName, password string) (err error) {
 	// 链接服务器
 	conn, err := net.Dial("tcp", "localhost:8888")
-	defer conn.Close()
+
 	if err != nil {
 		fmt.Printf("connect server error: %v", err)
 		return
@@ -49,27 +49,7 @@ func (up UserProcess) Login(userName, password string) (err error) {
 	}
 
 	// 接受服务端返回
-	var responseMsg commen.ResponseMessage
-	dispatcher = utils.Dispatcher{Conn: conn}
-
-	responseMsg, err = dispatcher.ReadDate()
-	if err != nil {
-		fmt.Printf("some error, retry please!\n")
-		return
-	}
-
-	switch responseMsg.Code {
-	case 200:
-		fmt.Printf("Loggin succeed!")
-	case 500:
-		err = errors.New("server error")
-	case 404:
-		err = errors.New("user not exist")
-	case 403:
-		err = errors.New("pasword not valide")
-	default:
-		err = errors.New("some error")
-	}
+	go Response(conn)
 
 	return
 }
