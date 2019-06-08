@@ -7,9 +7,38 @@ import (
 	"go-chat/client/utils"
 	commen "go-chat/commen/message"
 	"net"
+	"os"
 )
 
 type UserProcess struct{}
+
+// 登陆成功菜单显示：
+func showAfterLoginMenu() {
+
+	fmt.Println("-------login succeed!---------")
+	fmt.Println("-------1. Show all online users---------")
+	fmt.Println("-------2. Send message---------")
+	fmt.Println("-------3. Show history messsge---------")
+	fmt.Println("-------4. exist---------")
+	var key int
+	var content string
+
+	fmt.Scanf("%d\n", &key)
+	switch key {
+	case 1:
+		fmt.Println("Show all online users")
+	case 2:
+		fmt.Println("Say some thing!")
+		fmt.Scanf("%s\n", &content)
+	case 3:
+		fmt.Println("Message List：")
+	case 4:
+		fmt.Println("Exit...")
+		os.Exit(0)
+	default:
+		fmt.Println("selected invalied!")
+	}
+}
 
 // 用户登陆
 func (up UserProcess) Login(userName, password string) (err error) {
@@ -50,6 +79,10 @@ func (up UserProcess) Login(userName, password string) (err error) {
 
 	// 接受服务端返回
 	go Response(conn)
+
+	for {
+		showAfterLoginMenu()
+	}
 	return
 }
 
