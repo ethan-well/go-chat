@@ -47,7 +47,7 @@ func getUsrById(conn redis.Conn, id int) (user User, err error) {
 	return
 }
 
-// 根据用户 id 获取用户信息
+// 根据用户 username 获取用户信息
 // 获取成功返回 user 信息，err nil
 // 获取失败返回 err，user 为 nil
 func getUsrByUserName(conn redis.Conn, userName string) (user User, err error) {
@@ -118,5 +118,6 @@ func (this *UserDao) Login(userName, password string) (user User, err error) {
 		err = ERROR_USER_PWD
 		return
 	}
+
 	return
 }
