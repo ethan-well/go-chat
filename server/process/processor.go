@@ -3,6 +3,7 @@ package process
 import (
 	"fmt"
 	commen "go-chat/commen/message"
+	"go-chat/server/model"
 	"go-chat/server/utils"
 	"io"
 	"net"
@@ -47,6 +48,8 @@ func (this *Processor) MainProcess() {
 		message, err := dispatcher.ReadData()
 		if err != nil {
 			if err == io.EOF {
+				cc := model.ClientConn{}
+				cc.Del(this.Conn)
 				fmt.Printf("client closed!\n")
 				break
 			}
