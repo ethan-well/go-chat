@@ -30,6 +30,8 @@ func (this *Processor) messgeProcess(message commen.Message) (err error) {
 		}
 	case commen.UserSendGroupMessageType:
 		fmt.Printf("user send group message!")
+		gmp := GroupMessageProcess{}
+		gmp.sendToGroupUsers(message.Data)
 	default:
 		fmt.Printf("other type\n")
 	}

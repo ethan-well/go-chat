@@ -1,6 +1,7 @@
 package process
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"go-chat/client/utils"
@@ -40,31 +41,44 @@ func dealRegisterResponse(responseMsg commen.ResponseMessage) (err error) {
 	return
 }
 
+func dealGroupMessage(responseMsg commen.ResponseMessage) (err error) {
+	var groupMessage commen.SendGroupMessageToClient
+	err = json.Unmarshal([]byte(responseMsg.Data), &groupMessage)
+	if err != nil {
+		return
+	}
+	fmt.Printf("%v send message: %v\n", groupMessage.UserID, groupMessage.Content)
+	return
+}
+
 // 处理服务端的返回
-func Response(conn net.Conn, c chan bool, resErr chan error) (err error) {
-	defer conn.Close()
+func Response(conn net.Conn) (err error) {
 	var responseMsg commen.ResponseMessage
 	dispatcher := utils.Dispatcher{Conn: conn}
 
-	responseMsg, err = dispatcher.ReadDate()
-	if err != nil {
-		fmt.Printf("some error, %v!\n", err)
-		resErr <- err
-		return
-	}
-
-	// 根据服务端返回的消息类型，进行相应的处理
-	switch responseMsg.Type {
-	case commen.LoginResponseMessageType:
-		err = dealLoginResponse(responseMsg)
-	case commen.RegisterResponseMessageType:
-		err = dealRegisterResponse(responseMsg)
+	for {
+		responseMsg, err = dispatcher.ReadDate()
 		if err != nil {
-			fmt.Printf("%v\n", err)
+			fmt.Printf("some error, %v!\n", err)
+			return
+		}
+
+		// 根据服务端返回的消息类型，进行相应的处理
+		switch responseMsg.Type {
+		case commen.LoginResponseMessageType:
+			err = dealLoginResponse(responseMsg)
+		case commen.RegisterResponseMessageType:
+			err = dealRegisterResponse(responseMsg)
+			if err != nil {
+				fmt.Printf("%v\n", err)
+			}
+		case commen.SendGroupMessageToClientType:
+			err = dealGroupMessage(responseMsg)
+			if err != nil {
+				fmt.Printf("%v\n", err)
+			}
+		default:
+			fmt.Println("un")
 		}
 	}
-	resErr <- err
-	c <- true
-
-	return
 }

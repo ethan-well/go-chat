@@ -106,7 +106,7 @@ func (this *UserDao) Register(userName, password, passwordConfirm string) (user 
 
 func (this *UserDao) Login(userName, password string) (user User, err error) {
 	conn := this.pool.Get()
-	defer conn.Close()
+	// defer conn.Close()
 
 	user, err = getUsrByUserName(conn, userName)
 	if err != nil {

@@ -83,14 +83,7 @@ func (up UserProcess) Login(userName, password string) (err error) {
 		return
 	}
 
-	// get response from server
-	c := make(chan bool, 1)
-	resErr := make(chan error, 1)
-	go Response(conn, c, resErr)
-	<-c
-	if err = <-resErr; err != nil {
-		return
-	}
+	go Response(conn)
 
 	for {
 		showAfterLoginMenu()
@@ -142,14 +135,7 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 		return
 	}
 
-	// 接受服务端返回
-	// 避免主 routine 提前返回
-	c := make(chan bool, 1)
-
-	resErr := make(chan error, 1)
-	go Response(conn, c, resErr)
-	<-c
-	err = <-resErr
+	go Response(conn)
 
 	return
 }

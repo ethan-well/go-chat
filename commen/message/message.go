@@ -1,11 +1,12 @@
 package commen
 
 const (
-	LoginMessageType            = "LoginMessage"
-	RegisterMessageType         = "RegisterMessage"
-	LoginResponseMessageType    = "LoginResponseMessageType"
-	RegisterResponseMessageType = "ResponseMessageType"
-	UserSendGroupMessageType    = "UserSendGroupMessageType"
+	LoginMessageType             = "LoginMessage"
+	RegisterMessageType          = "RegisterMessage"
+	LoginResponseMessageType     = "LoginResponseMessageType"
+	RegisterResponseMessageType  = "ResponseMessageType"
+	UserSendGroupMessageType     = "UserSendGroupMessageType"
+	SendGroupMessageToClientType = "SendGroupMessageToClientType"
 
 	ServerError = 500
 
@@ -34,6 +35,7 @@ type ResponseMessage struct {
 	Type  string
 	Code  int    // 404 用户没找到， 403 账号或者密码错误, 200 登陆成功, 500 服务端错误
 	Error string // 错误消息
+	Data  string
 }
 
 type RegisterMessage struct {
@@ -46,4 +48,10 @@ type UserSendGroupMessage struct {
 	GroupID int    // 目标组 id
 	UserID  int    // 当前用户 id
 	Content string // 小心主体内容
+}
+
+type SendGroupMessageToClient struct {
+	GroupID int
+	UserID  int
+	Content string
 }
