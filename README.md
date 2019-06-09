@@ -22,3 +22,9 @@ go build -o server go-chat/server/main
 go build -o client go-chat/client
 ./client
 ```
+
+## Function of this demo
+1. user register
+2. user login
+3. user send group message
+4. show online user list
