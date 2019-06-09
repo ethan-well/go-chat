@@ -31,6 +31,11 @@ func showAfterLoginMenu() {
 	case 2:
 		fmt.Println("Say some thing!")
 		fmt.Scanf("%s\n", &content)
+		messageProcess := MessageProcess{}
+		err := messageProcess.SendGroupMessageToServer(1, 1, content)
+		if err != nil {
+			fmt.Printf("some error when send data to server: %v\n", err)
+		}
 	case 3:
 		fmt.Println("Message List：")
 	case 4:
@@ -43,7 +48,7 @@ func showAfterLoginMenu() {
 
 // 用户登陆
 func (up UserProcess) Login(userName, password string) (err error) {
-	// 链接服务器
+	// connect server
 	conn, err := net.Dial("tcp", "localhost:8888")
 
 	if err != nil {
@@ -78,7 +83,7 @@ func (up UserProcess) Login(userName, password string) (err error) {
 		return
 	}
 
-	// 接受服务端返回
+	// get response from server
 	c := make(chan bool, 1)
 	resErr := make(chan error, 1)
 	go Response(conn, c, resErr)

@@ -5,6 +5,7 @@ const (
 	RegisterMessageType         = "RegisterMessage"
 	LoginResponseMessageType    = "LoginResponseMessageType"
 	RegisterResponseMessageType = "ResponseMessageType"
+	UserSendGroupMessageType    = "UserSendGroupMessageType"
 
 	ServerError = 500
 
@@ -39,4 +40,10 @@ type RegisterMessage struct {
 	UserName        string
 	Password        string
 	PasswordConfirm string
+}
+
+type UserSendGroupMessage struct {
+	GroupID int    // 目标组 id
+	UserID  int    // 当前用户 id
+	Content string // 小心主体内容
 }

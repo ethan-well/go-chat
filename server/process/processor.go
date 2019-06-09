@@ -28,6 +28,8 @@ func (this *Processor) messgeProcess(message commen.Message) (err error) {
 		if err != nil {
 			fmt.Printf("some error when register: %v\n", err)
 		}
+	case commen.UserSendGroupMessageType:
+		fmt.Printf("user send group message!")
 	default:
 		fmt.Printf("other type\n")
 	}
