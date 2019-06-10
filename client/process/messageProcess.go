@@ -68,5 +68,11 @@ func (msg MessageProcess) GetOnlineUerList() (err error) {
 		return
 	}
 
+	go Response(conn)
+
+	for {
+		showAfterLoginMenu()
+	}
+
 	return
 }

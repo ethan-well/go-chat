@@ -51,6 +51,11 @@ func dealGroupMessage(responseMsg commen.ResponseMessage) (err error) {
 	return
 }
 
+func showAllOnlineUsersList(responseMsg commen.ResponseMessage) (err error) {
+	fmt.Println("deal with show all online users")
+	return
+}
+
 // 处理服务端的返回
 func Response(conn net.Conn) (err error) {
 	var responseMsg commen.ResponseMessage
@@ -77,6 +82,8 @@ func Response(conn net.Conn) (err error) {
 			if err != nil {
 				fmt.Printf("%v\n", err)
 			}
+		case commen.ShowAllOnlineUsersType:
+			err = showAllOnlineUsersList(responseMsg)
 		default:
 			fmt.Println("un")
 		}
