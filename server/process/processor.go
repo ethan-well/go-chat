@@ -30,9 +30,15 @@ func (this *Processor) messgeProcess(message commen.Message) (err error) {
 			fmt.Printf("some error when register: %v\n", err)
 		}
 	case commen.UserSendGroupMessageType:
-		fmt.Printf("user send group message!")
+		fmt.Println("user send group message!")
 		gmp := GroupMessageProcess{}
 		gmp.sendToGroupUsers(message.Data)
+	case commen.ShowAllOnlineUsersType:
+		olP := OnlineInfoProcess{this.Conn}
+		err = olP.showAllOnlineUserList()
+		if err != nil {
+			fmt.Println("get all online user list error: %v", err)
+		}
 	default:
 		fmt.Printf("other type\n")
 	}

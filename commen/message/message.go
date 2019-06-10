@@ -7,6 +7,7 @@ const (
 	RegisterResponseMessageType  = "ResponseMessageType"
 	UserSendGroupMessageType     = "UserSendGroupMessageType"
 	SendGroupMessageToClientType = "SendGroupMessageToClientType"
+	ShowAllOnlineUsersType       = "ShowAllOnlineUsersType"
 
 	ServerError = 500
 

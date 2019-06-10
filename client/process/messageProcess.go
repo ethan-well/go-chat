@@ -37,11 +37,36 @@ func (msgProc MessageProcess) SendGroupMessageToServer(groupID, userID int, cont
 
 	dispatcher := utils.Dispatcher{Conn: conn}
 	err = dispatcher.SendData(data)
+
+	return
+}
+
+// request all online user
+func (msg MessageProcess) GetOnlineUerList() (err error) {
+	conn, err := net.Dial("tcp", "localhost:8888")
 	if err != nil {
 		return
 	}
 
-	// get response from server
-	// get_response
+	var message = commen.Message{}
+	message.Type = commen.ShowAllOnlineUsersType
+
+	requestBody, err := json.Marshal("")
+	if err != nil {
+		return
+	}
+	message.Data = string(requestBody)
+
+	data, err := json.Marshal(message)
+	if err != nil {
+		return
+	}
+
+	dispatcher := utils.Dispatcher{Conn: conn}
+	err = dispatcher.SendData(data)
+	if err != nil {
+		return
+	}
+
 	return
 }

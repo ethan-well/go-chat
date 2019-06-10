@@ -33,7 +33,10 @@ func idIncr(conn redis.Conn) (id int, err error) {
 // 根据用户 id 获取用户信息
 // 获取成功返回 user 信息，err nil
 // 获取失败返回 err，user 为 nil
-func getUsrById(conn redis.Conn, id int) (user User, err error) {
+func (this *UserDao) GetUsrById(id int) (user User, err error) {
+	conn := this.pool.Get()
+	defer conn.Close()
+
 	res, err := redis.String(conn.Do("hget", "users", id))
 	if err != nil {
 		err = ERROR_USER_NOT_EXISTS
