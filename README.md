@@ -28,3 +28,4 @@ go build -o client go-chat/client
 2. user login
 3. user send group message
 4. show online user list
+5. point-to-point communication
