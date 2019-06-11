@@ -78,7 +78,7 @@ func (this *UserProcess) UserLogin(message string) (err error) {
 		code = commen.LoginSucceed
 		// save user conn status
 		clientConn := model.ClientConn{}
-		clientConn.Save(user.ID, this.Conn)
+		clientConn.Save(user.ID, user.Name, this.Conn)
 	case model.ERROR_USER_NOT_EXISTS:
 		code = 404
 	case model.ERROR_USER_PWD:

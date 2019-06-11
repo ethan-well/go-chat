@@ -53,7 +53,10 @@ func (this *UserDao) GetUsrById(id int) (user User, err error) {
 // 根据用户 username 获取用户信息
 // 获取成功返回 user 信息，err nil
 // 获取失败返回 err，user 为 nil
-func getUsrByUserName(conn redis.Conn, userName string) (user User, err error) {
+func (this *UserDao) GetUsrByUserName(userName string) (user User, err error) {
+	conn := this.pool.Get()
+	defer conn.Close()
+
 	res, err := redis.String(conn.Do("hget", "users", userName))
 	if err != nil {
 		err = ERROR_USER_NOT_EXISTS
@@ -70,9 +73,6 @@ func getUsrByUserName(conn redis.Conn, userName string) (user User, err error) {
 // 注册用户
 // 用户名不能重复
 func (this *UserDao) Register(userName, password, passwordConfirm string) (user User, err error) {
-	conn := this.pool.Get()
-	defer conn.Close()
-
 	// 判断密码是否正确
 	if password != passwordConfirm {
 		err = ERROR_PASSWORD_NOT_MATCH
@@ -80,13 +80,15 @@ func (this *UserDao) Register(userName, password, passwordConfirm string) (user 
 	}
 
 	// 保证用户名不重复
-	user, err = getUsrByUserName(conn, userName)
+	user, err = this.GetUsrByUserName(userName)
 	if err == nil {
 		fmt.Printf("user name is existed!\n")
 		err = ERROR_USER_EXISTED
 		return
 	}
 
+	conn := this.pool.Get()
+	defer conn.Close()
 	// id 自增 1，作为下个用户 id
 	id, err := idIncr(conn)
 	if err != nil {
@@ -108,10 +110,7 @@ func (this *UserDao) Register(userName, password, passwordConfirm string) (user 
 }
 
 func (this *UserDao) Login(userName, password string) (user User, err error) {
-	conn := this.pool.Get()
-	// defer conn.Close()
-
-	user, err = getUsrByUserName(conn, userName)
+	user, err = this.GetUsrByUserName(userName)
 	if err != nil {
 		fmt.Printf("get user by id error: %v\n", err)
 		return

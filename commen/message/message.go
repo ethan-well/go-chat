@@ -56,3 +56,9 @@ type SendGroupMessageToClient struct {
 	UserID  int
 	Content string
 }
+
+// on line user info
+type UserInfo struct {
+	ID       int
+	UserName string
+}

@@ -6,19 +6,24 @@ import (
 
 type ClientConn struct{}
 
-var ClientConnsMap map[int]net.Conn
-
-func init() {
-	ClientConnsMap = make(map[int]net.Conn)
+type ConnInfo struct {
+	Conn     net.Conn
+	UserName string
 }
 
-func (cc ClientConn) Save(userID int, userConn net.Conn) {
-	ClientConnsMap[userID] = userConn
+var ClientConnsMap map[int]ConnInfo
+
+func init() {
+	ClientConnsMap = make(map[int]ConnInfo)
+}
+
+func (cc ClientConn) Save(userID int, name string, userConn net.Conn) {
+	ClientConnsMap[userID] = ConnInfo{userConn, name}
 }
 
 func (cc ClientConn) Del(userConn net.Conn) {
-	for id, conn := range ClientConnsMap {
-		if conn == userConn {
+	for id, connInfo := range ClientConnsMap {
+		if userConn == connInfo.Conn {
 			delete(ClientConnsMap, id)
 		}
 	}

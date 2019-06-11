@@ -13,17 +13,13 @@ type OnlineInfoProcess struct {
 	Conn net.Conn
 }
 
-type UserInfo struct {
-	id       int
-	userName string
-}
+type UserInfo = commen.UserInfo
 
 func (this OnlineInfoProcess) showAllOnlineUserList() (err error) {
-	fmt.Printf("come here!")
 	var onlineUserList []UserInfo
 	var code int
-	for id, _ := range model.ClientConnsMap {
-		user, err := model.CurrentUserDao.GetUsrById(id)
+	for _, connInfo := range model.ClientConnsMap {
+		user, err := model.CurrentUserDao.GetUsrByUserName(connInfo.UserName)
 		if err != nil {
 			continue
 		}

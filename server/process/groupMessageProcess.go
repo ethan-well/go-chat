@@ -23,10 +23,10 @@ func (gmp GroupMessageProcess) sendToGroupUsers(message string) (err error) {
 		fmt.Printf("json.Marshal(toClientMessage) error\n")
 	}
 
-	for id, conn := range model.ClientConnsMap {
+	for id, connInfo := range model.ClientConnsMap {
 		fmt.Printf("client id: %v \n", id)
 
-		dispatcher := utils.Dispatcher{Conn: conn}
+		dispatcher := utils.Dispatcher{Conn: connInfo.Conn}
 
 		err = dispatcher.WirteData(data)
 		if err != nil {

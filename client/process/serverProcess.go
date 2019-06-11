@@ -52,7 +52,22 @@ func dealGroupMessage(responseMsg commen.ResponseMessage) (err error) {
 }
 
 func showAllOnlineUsersList(responseMsg commen.ResponseMessage) (err error) {
-	fmt.Println("deal with show all online users")
+	if responseMsg.Code != 200 {
+		err = errors.New("Server Error!")
+		return
+	}
+
+	var userList []commen.UserInfo
+	err = json.Unmarshal([]byte(responseMsg.Data), &userList)
+	if err != nil {
+		return
+	}
+
+	fmt.Println("On line user list")
+	fmt.Printf("\t\tID\t\tname\n")
+	for _, info := range userList {
+		fmt.Printf("\t\t%v\t\t%v\n", info.ID, info.UserName)
+	}
 	return
 }
 
@@ -84,6 +99,9 @@ func Response(conn net.Conn) (err error) {
 			}
 		case commen.ShowAllOnlineUsersType:
 			err = showAllOnlineUsersList(responseMsg)
+			if err != nil {
+				fmt.Printf("some error when get online user info: %v\n", err)
+			}
 		default:
 			fmt.Println("un")
 		}
