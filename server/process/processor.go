@@ -39,6 +39,8 @@ func (this *Processor) messgeProcess(message commen.Message) (err error) {
 		if err != nil {
 			fmt.Println("get all online user list error: %v", err)
 		}
+	case commen.PointToPointMessageType:
+		fmt.Printf("point to point comminite!")
 	default:
 		fmt.Printf("other type\n")
 	}

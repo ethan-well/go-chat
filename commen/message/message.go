@@ -8,6 +8,7 @@ const (
 	UserSendGroupMessageType     = "UserSendGroupMessageType"
 	SendGroupMessageToClientType = "SendGroupMessageToClientType"
 	ShowAllOnlineUsersType       = "ShowAllOnlineUsersType"
+	PointToPointMessageType      = "PointToPointMessageType"
 
 	ServerError = 500
 
@@ -55,6 +56,14 @@ type SendGroupMessageToClient struct {
 	GroupID int
 	UserID  int
 	Content string
+}
+
+type PointToPointMessage struct {
+	SourceUserID   int
+	SourceUserName string
+	TargetUserID   int
+	TargetUserName string
+	Content        string
 }
 
 // on line user info

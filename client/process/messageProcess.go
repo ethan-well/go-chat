@@ -76,3 +76,37 @@ func (msg MessageProcess) GetOnlineUerList() (err error) {
 
 	return
 }
+
+func (msgProc MessageProcess) PointToPointCommunication(targetUserName, sourceUserName, message string) (err error) {
+	conn, err := net.Dial("tcp", "localhost:8888")
+	if err != nil {
+		return
+	}
+	defer conn.Close()
+
+	var pointToPointMessage commen.Message
+
+	pointToPointMessage.Type = commen.PointToPointMessageType
+
+	messageBody := commen.PointToPointMessage{
+		SourceUserName: sourceUserName,
+		TargetUserName: targetUserName,
+		Content:        message,
+	}
+
+	data, err := json.Marshal(messageBody)
+	if err != nil {
+		return
+	}
+
+	pointToPointMessage.Data = string(data)
+
+	data, err = json.Marshal(pointToPointMessage)
+	if err != nil {
+		return
+	}
+
+	dispatcher := utils.Dispatcher{Conn: conn}
+	err = dispatcher.SendData(data)
+	return
+}

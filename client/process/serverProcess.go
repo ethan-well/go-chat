@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"go-chat/client/model"
 	"go-chat/client/utils"
 	commen "go-chat/commen/message"
 	"net"
@@ -12,7 +13,20 @@ import (
 func dealLoginResponse(responseMsg commen.ResponseMessage) (err error) {
 	switch responseMsg.Code {
 	case 200:
-		err = nil
+		// 解析当前用户信息
+		var userInfo commen.UserInfo
+		err = json.Unmarshal([]byte(responseMsg.Data), &userInfo)
+		if err != nil {
+			return
+		}
+
+		// 初始化 CurrentUser
+		user := model.User{}
+		err = user.InitCurrentUser(userInfo.ID, userInfo.UserName)
+		fmt.Printf("current user, id: %d, name: %v\n", model.CurrentUser.UserID, model.CurrentUser.UserName)
+		if err != nil {
+			return
+		}
 	case 500:
 		err = errors.New("server error")
 	case 404:

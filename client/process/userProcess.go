@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"go-chat/client/model"
 	"go-chat/client/utils"
 	commen "go-chat/commen/message"
 	"net"
@@ -18,9 +19,10 @@ func showAfterLoginMenu() {
 	fmt.Println("----------------login succeed!----------------")
 	fmt.Println("\t\tselect what you want to do")
 	fmt.Println("\t\t1. Show all online users")
-	fmt.Println("\t\t2. Send message")
-	fmt.Println("\t\t3. Show history messsge")
-	fmt.Println("\t\t4. exist")
+	fmt.Println("\t\t2. Send group message")
+	fmt.Println("\t\t3. point-to-point communication")
+	fmt.Println("\t\t4. Show history messsge")
+	fmt.Println("\t\t5. exist")
 	var key int
 	var content string
 
@@ -42,7 +44,18 @@ func showAfterLoginMenu() {
 			fmt.Printf("some error when send data to server: %v\n", err)
 		}
 	case 3:
-		fmt.Println("Message List：")
+		var targetUserName, message string
+
+		fmt.Println("select one friend")
+		fmt.Scanf("%s\n", &targetUserName)
+		fmt.Println("Input message:")
+		fmt.Scanf("%s\n", &message)
+
+		messageProcess := MessageProcess{}
+		err := messageProcess.PointToPointCommunication(targetUserName, model.CurrentUser.UserName, message)
+		if err != nil {
+			fmt.Printf("some error when point to point comunication: %v\n", err)
+		}
 	case 4:
 		fmt.Println("Exit...")
 		os.Exit(0)
