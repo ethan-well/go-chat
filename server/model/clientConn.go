@@ -28,3 +28,13 @@ func (cc ClientConn) Del(userConn net.Conn) {
 		}
 	}
 }
+
+func (cc ClientConn) SearchByUserName(userName string) (connInfo net.Conn, err error) {
+	user, err := CurrentUserDao.GetUsrByUserName(userName)
+	if err != nil {
+		return
+	}
+
+	connInfo = ClientConnsMap[user.ID].Conn
+	return
+}

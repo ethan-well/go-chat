@@ -37,10 +37,15 @@ func (this *Processor) messgeProcess(message commen.Message) (err error) {
 		olP := OnlineInfoProcess{this.Conn}
 		err = olP.showAllOnlineUserList()
 		if err != nil {
-			fmt.Println("get all online user list error: %v", err)
+			fmt.Println("get all online user list error: %v\n", err)
 		}
 	case commen.PointToPointMessageType:
-		fmt.Printf("point to point comminite!")
+		fmt.Println("point to point comminite!")
+		pop := PointToPointMessageProcess{}
+		err = pop.sendMessageToTargetUser(message.Data)
+		if err != nil {
+			fmt.Printf("point to point message send error: %v\n", err)
+		}
 	default:
 		fmt.Printf("other type\n")
 	}
