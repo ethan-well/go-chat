@@ -15,14 +15,12 @@ type UserProcess struct{}
 
 // 登陆成功菜单显示：
 func showAfterLoginMenu() {
-
 	fmt.Println("----------------login succeed!----------------")
 	fmt.Println("\t\tselect what you want to do")
 	fmt.Println("\t\t1. Show all online users")
 	fmt.Println("\t\t2. Send group message")
 	fmt.Println("\t\t3. point-to-point communication")
-	fmt.Println("\t\t4. Show history messsge")
-	fmt.Println("\t\t5. exist")
+	fmt.Println("\t\t4. exist")
 	var key int
 	var content string
 
@@ -133,7 +131,7 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 
 	data, err := json.Marshal(registerMessage)
 	if err != nil {
-		fmt.Printf("client soem error: %v", err)
+		fmt.Printf("client soem error: %v\n", err)
 	}
 
 	// 构造需要传递给服务器的数据
@@ -142,7 +140,7 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 
 	data, err = json.Marshal(messsage)
 	if err != nil {
-		fmt.Printf("registerMessage json Marshal error: %v", err)
+		fmt.Printf("registerMessage json Marshal error: %v\n", err)
 		return
 	}
 

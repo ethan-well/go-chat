@@ -28,7 +28,7 @@ func dialogue(conn net.Conn) {
 }
 
 func main() {
-	fmt.Printf("服务端启动成功\n")
+	fmt.Printf("Server is already\n")
 
 	listenr, err := net.Listen("tcp", "0.0.0.0:8888")
 	defer listenr.Close()
@@ -37,7 +37,7 @@ func main() {
 	}
 
 	for {
-		fmt.Printf("等待客户端的连接...\n")
+		fmt.Printf("Waiting for client...\n")
 
 		conn, err := listenr.Accept()
 		if err != nil {
