@@ -85,6 +85,22 @@ func showAllOnlineUsersList(responseMsg commen.ResponseMessage) (err error) {
 	return
 }
 
+func showPointToPointMesssage(responseMsg commen.ResponseMessage) (err error) {
+	if responseMsg.Code != 200 {
+		err = errors.New("Server Error!")
+		return
+	}
+
+	var pointToPointMessage commen.PointToPointMessage
+	err = json.Unmarshal([]byte(responseMsg.Data), &pointToPointMessage)
+	if err != nil {
+		return
+	}
+
+	fmt.Printf("\r\n\r\n%v say：\t%v\n", pointToPointMessage.SourceUserName, pointToPointMessage.Content)
+	return
+}
+
 // 处理服务端的返回
 func Response(conn net.Conn) (err error) {
 	var responseMsg commen.ResponseMessage
@@ -115,6 +131,11 @@ func Response(conn net.Conn) (err error) {
 			err = showAllOnlineUsersList(responseMsg)
 			if err != nil {
 				fmt.Printf("some error when get online user info: %v\n", err)
+			}
+		case commen.PointToPointMessageType:
+			err = showPointToPointMesssage(responseMsg)
+			if err != nil {
+				fmt.Printf("get point to point message error; %v", err)
 			}
 		default:
 			fmt.Println("un")
