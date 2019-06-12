@@ -35,7 +35,10 @@ func (this OnlineInfoProcess) showAllOnlineUserList() (err error) {
 		code = 200
 	}
 
-	responseClient(this.Conn, code, string(data), fmt.Sprintf("%v", err))
+	err = responseClient(this.Conn, code, string(data), fmt.Sprintf("%v", err))
+	if err != nil {
+		fmt.Printf("point to point communicate, response client error: %v", err)
+	}
 	return
 }
 

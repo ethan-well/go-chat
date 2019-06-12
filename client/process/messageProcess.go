@@ -82,7 +82,7 @@ func (msgProc MessageProcess) PointToPointCommunication(targetUserName, sourceUs
 	if err != nil {
 		return
 	}
-	defer conn.Close()
+	// defer conn.Close()
 
 	var pointToPointMessage commen.Message
 

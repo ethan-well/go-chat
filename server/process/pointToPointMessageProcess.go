@@ -2,9 +2,11 @@ package process
 
 import (
 	"encoding/json"
+	"fmt"
 	commen "go-chat/commen/message"
 	"go-chat/server/model"
 	"go-chat/server/utils"
+	"net"
 )
 
 type PointToPointMessageProcess struct{}
@@ -42,6 +44,25 @@ func (this PointToPointMessageProcess) sendMessageToTargetUser(message string) (
 	responseData, err := json.Marshal(responseMessage)
 	if err != nil {
 		return
+	}
+
+	dispatcher := utils.Dispatcher{Conn: conn}
+	err = dispatcher.WirteData(responseData)
+
+	return
+}
+
+func (this *PointToPointMessageProcess) responseClient(conn net.Conn, code int, data string, popErr error) (err error) {
+	responseMessage := commen.ResponseMessage{
+		Code:  code,
+		Type:  commen.PointToPointMessageType,
+		Error: fmt.Sprintf("%v", popErr),
+		Data:  data,
+	}
+
+	responseData, err := json.Marshal(responseMessage)
+	if err != nil {
+		fmt.Printf("some error when generate response message, error: %v", err)
 	}
 
 	dispatcher := utils.Dispatcher{Conn: conn}

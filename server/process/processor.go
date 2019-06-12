@@ -43,9 +43,19 @@ func (this *Processor) messgeProcess(message commen.Message) (err error) {
 		fmt.Println("point to point comminite!")
 		pop := PointToPointMessageProcess{}
 		err = pop.sendMessageToTargetUser(message.Data)
+		var code int
 		if err != nil {
-			fmt.Printf("point to point message send error: %v\n", err)
+			code = 400
+		} else {
+			code = 100
 		}
+
+		// responseClient(conn net.Conn, code int, data string, err error) {
+		err := pop.responseClient(this.Conn, code, "", err)
+		if err != nil {
+			fmt.Printf("some err when popmessage: %v", err)
+		}
+
 	default:
 		fmt.Printf("other type\n")
 	}
