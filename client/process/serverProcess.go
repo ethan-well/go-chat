@@ -109,7 +109,6 @@ func Response(conn net.Conn) (err error) {
 	for {
 		responseMsg, err = dispatcher.ReadDate()
 		if err != nil {
-			fmt.Printf("some error, %v!\n", err)
 			return
 		}
 
@@ -139,6 +138,10 @@ func Response(conn net.Conn) (err error) {
 			}
 		default:
 			fmt.Println("un")
+		}
+
+		if err != nil {
+			return
 		}
 	}
 }

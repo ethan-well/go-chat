@@ -25,7 +25,7 @@ func main() {
 		fmt.Scanf("%d\n", &key)
 		switch key {
 		case 1:
-			fmt.Printf("sign In\r\n\r\n")
+			fmt.Printf("sign In\r\n")
 			fmt.Println("Username:")
 			fmt.Scanf("%s\n", &userName)
 			fmt.Println("Password:")
@@ -36,9 +36,9 @@ func main() {
 			err := up.Login(userName, password)
 
 			if err != nil {
-				fmt.Printf("Login failed: %v\n", err)
+				fmt.Printf("Login failed: %v\r\n", err)
 			} else {
-				fmt.Printf("Login succeed!\n")
+				fmt.Printf("Login succeed!\r\n")
 			}
 		case 2:
 			fmt.Println("Create account")

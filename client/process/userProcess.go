@@ -99,7 +99,10 @@ func (up UserProcess) Login(userName, password string) (err error) {
 		return
 	}
 
-	go Response(conn)
+	err = Response(conn)
+	if err != nil {
+		return
+	}
 
 	for {
 		showAfterLoginMenu()
