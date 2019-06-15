@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"go-chat/client/logger"
 	"go-chat/client/model"
 	"go-chat/client/utils"
 	commen "go-chat/commen/message"
@@ -15,12 +16,12 @@ type UserProcess struct{}
 
 // 登陆成功菜单显示：
 func showAfterLoginMenu() {
-	fmt.Println("\n----------------login succeed!----------------")
-	fmt.Println("\t\tselect what you want to do")
-	fmt.Println("\t\t1. Show all online users")
-	fmt.Println("\t\t2. Send group message")
-	fmt.Println("\t\t3. point-to-point communication")
-	fmt.Println("\t\t4. exist")
+	logger.Info("\n----------------login succeed!----------------\n")
+	logger.Info("\t\tselect what you want to do\n")
+	logger.Info("\t\t1. Show all online users\n")
+	logger.Info("\t\t2. Send group message\n")
+	logger.Info("\t\t3. point-to-point communication\n")
+	logger.Info("\t\t4. exist\n")
 	var key int
 	var content string
 
@@ -29,35 +30,33 @@ func showAfterLoginMenu() {
 	case 1:
 		messageProcess := MessageProcess{}
 		err := messageProcess.GetOnlineUerList()
-		fmt.Printf("some all on line user!!!!!!")
 		if err != nil {
-			fmt.Printf("some error when get online user list, error: %v\n", err)
+			logger.Error("some error when get online user list, error: %v\n", err)
 		}
-		fmt.Printf("some all on line user!!!!!!")
 		return
 	case 2:
-		fmt.Println("Say something:")
+		logger.Notice("Say something:\n")
 		fmt.Scanf("%s\n", &content)
 		currentUser := model.CurrentUser
 		messageProcess := MessageProcess{}
 		err := messageProcess.SendGroupMessageToServer(0, currentUser.UserName, content)
 		if err != nil {
-			fmt.Printf("Some error when send data to server: %v\n", err)
+			logger.Error("Some error when send data to server: %v\n", err)
 		} else {
-			fmt.Printf("Send group message succeed!\n\n")
+			logger.Success("Send group message succeed!\n\n")
 		}
 	case 3:
 		var targetUserName, message string
 
-		fmt.Println("Select one friend by user name")
+		logger.Notice("Select one friend by user name\n")
 		fmt.Scanf("%s\n", &targetUserName)
-		fmt.Println("Input message:")
+		logger.Notice("Input message:\n")
 		fmt.Scanf("%s\n", &message)
 
 		messageProcess := MessageProcess{}
 		conn, err := messageProcess.PointToPointCommunication(targetUserName, model.CurrentUser.UserName, message)
 		if err != nil {
-			fmt.Printf("some error when point to point comunication: %v\n", err)
+			logger.Error("some error when point to point comunication: %v\n", err)
 			return
 		}
 
@@ -66,13 +65,13 @@ func showAfterLoginMenu() {
 		err = <-errMsg
 
 		if err.Error() != "<nil>" {
-			fmt.Printf("send message errror: %v\n", err)
+			logger.Error("send message errror: %v\n", err)
 		}
 	case 4:
-		fmt.Println("Exit...")
+		logger.Warn("Exit...\n")
 		os.Exit(0)
 	default:
-		fmt.Println("selected invalied!")
+		logger.Info("selected invalied!\n")
 	}
 }
 
@@ -82,7 +81,7 @@ func (up UserProcess) Login(userName, password string) (err error) {
 	conn, err := net.Dial("tcp", "localhost:8888")
 
 	if err != nil {
-		fmt.Printf("connect server error: %v", err)
+		logger.Error("connect server error: %v", err)
 		return
 	}
 
@@ -97,7 +96,7 @@ func (up UserProcess) Login(userName, password string) (err error) {
 	// 先序列话需要传到服务器的数据
 	data, err := json.Marshal(loginMessage)
 	if err != nil {
-		fmt.Printf("some error when parse you data, error: %v\n", err)
+		logger.Error("some error when parse you data, error: %v\n", err)
 		return
 	}
 
@@ -136,7 +135,7 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 	conn, err := net.Dial("tcp", "localhost:8888")
 
 	if err != nil {
-		fmt.Printf("connect server error: %v", err)
+		logger.Error("connect server error: %v", err)
 		return
 	}
 
@@ -151,7 +150,7 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 
 	data, err := json.Marshal(registerMessage)
 	if err != nil {
-		fmt.Printf("client soem error: %v\n", err)
+		logger.Error("client soem error: %v\n", err)
 	}
 
 	// 构造需要传递给服务器的数据
@@ -160,14 +159,14 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 
 	data, err = json.Marshal(messsage)
 	if err != nil {
-		fmt.Printf("registerMessage json Marshal error: %v\n", err)
+		logger.Error("registerMessage json Marshal error: %v\n", err)
 		return
 	}
 
 	dispatcher := utils.Dispatcher{Conn: conn}
 	err = dispatcher.SendData(data)
 	if err != nil {
-		fmt.Printf("send data erro!\n")
+		logger.Error("send data erro!\n")
 		return
 	}
 

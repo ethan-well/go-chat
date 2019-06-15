@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"errors"
-	"fmt"
+	"go-chat/client/logger"
 	commen "go-chat/commen/message"
 	"net"
 )
@@ -28,7 +28,7 @@ func (dispatcher Dispatcher) ReadDate() (msg commen.ResponseMessage, err error) 
 	// 读取消息本身
 	n, err = dispatcher.Conn.Read(buf[:dataLen])
 	if err != nil {
-		fmt.Printf("server read data login data error: %v", err)
+		logger.Error("server read data login data error: %v", err)
 	}
 
 	// 对比消息本身的长度和期望长度是否匹配
@@ -40,7 +40,7 @@ func (dispatcher Dispatcher) ReadDate() (msg commen.ResponseMessage, err error) 
 	// 从 conn 中解析消息并存放到 msg 中，此处一定传递的是 msg 的地址
 	err = json.Unmarshal(buf[:dataLen], &msg)
 	if err != nil {
-		fmt.Printf("json.Unmarshl error: %v", err)
+		logger.Error("json.Unmarshl error: %v", err)
 	}
 	return
 }
@@ -55,14 +55,14 @@ func (dispatcher Dispatcher) SendData(data []byte) (err error) {
 	// 客户端发送消息长度
 	writeLen, err := dispatcher.Conn.Write(bytes[:])
 	if writeLen != 4 || err != nil {
-		fmt.Printf("send data to server error: %v", err)
+		logger.Error("send data to server error: %v", err)
 		return
 	}
 
 	//客户端发送消息本身
 	writeLen, err = dispatcher.Conn.Write(data)
 	if err != nil {
-		fmt.Printf("send data length to server error: %v", err)
+		logger.Error("send data length to server error: %v", err)
 		return
 	}
 	return

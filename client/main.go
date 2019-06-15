@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"go-chat/client/logger"
 	"go-chat/client/process"
 )
 
@@ -15,20 +16,20 @@ func main() {
 	)
 
 	for loop {
-		fmt.Println("\n----------------Welcome to the chat room--------------")
-		fmt.Println("\t\tSelect the options：")
-		fmt.Println("\t\t\t 1、Sign in")
-		fmt.Println("\t\t\t 2、Sign up")
-		fmt.Println("\t\t\t 3、Exit the system")
+		logger.Info("\n----------------Welcome to the chat room--------------\n")
+		logger.Info("\t\tSelect the options：\n")
+		logger.Info("\t\t\t 1、Sign in\n")
+		logger.Info("\t\t\t 2、Sign up\n")
+		logger.Info("\t\t\t 3、Exit the system\n")
 
 		// get user input
 		fmt.Scanf("%d\n", &key)
 		switch key {
 		case 1:
-			fmt.Printf("sign In\r\n")
-			fmt.Println("Username:")
+			logger.Info("sign In Please\r\n")
+			logger.Notice("Username:\n")
 			fmt.Scanf("%s\n", &userName)
-			fmt.Println("Password:")
+			logger.Notice("Password:\n")
 			fmt.Scanf("%s\n", &password)
 
 			// err := login(userName, password)
@@ -36,29 +37,29 @@ func main() {
 			err := up.Login(userName, password)
 
 			if err != nil {
-				fmt.Printf("Login failed: %v\r\n", err)
+				logger.Error("Login failed: %v\r\n", err)
 			} else {
-				fmt.Printf("Login succeed!\r\n")
+				logger.Success("Login succeed!\r\n")
 			}
 		case 2:
-			fmt.Println("Create account")
-			fmt.Println("user name：")
+			logger.Info("Create account\n")
+			logger.Info("user name：\n")
 			fmt.Scanf("%s\n", &userName)
-			fmt.Println("password：")
+			logger.Info("password：\n")
 			fmt.Scanf("%s\n", &password)
-			fmt.Println("password confirm：")
+			logger.Info("password confirm：\n")
 			fmt.Scanf("%s\n", &password_confirm)
 
 			up := process.UserProcess{}
 			err := up.Register(userName, password, password_confirm)
 			if err != nil {
-				fmt.Printf("Creae account failed: %v\n", err)
+				logger.Error("Creae account failed: %v\n", err)
 			}
 		case 3:
-			fmt.Println("Exit...")
+			logger.Warn("Exit...\n")
 			loop = false // this is equal to 'os.Exit(0)'
 		default:
-			fmt.Printf("Select is invalid!\n")
+			logger.Error("Select is invalid!\n")
 		}
 	}
 }

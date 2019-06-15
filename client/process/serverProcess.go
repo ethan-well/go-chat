@@ -3,7 +3,7 @@ package process
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
+	"go-chat/client/logger"
 	"go-chat/client/model"
 	"go-chat/client/utils"
 	commen "go-chat/commen/message"
@@ -23,7 +23,8 @@ func dealLoginResponse(responseMsg commen.ResponseMessage) (err error) {
 		// 初始化 CurrentUser
 		user := model.User{}
 		err = user.InitCurrentUser(userInfo.ID, userInfo.UserName)
-		fmt.Printf("current user, id: %d, name: %v\n", model.CurrentUser.UserID, model.CurrentUser.UserName)
+		logger.Success("Login succeed!\n")
+		logger.Notice("current user, id: %d, name: %v\n", model.CurrentUser.UserID, model.CurrentUser.UserName)
 		if err != nil {
 			return
 		}
@@ -42,7 +43,7 @@ func dealLoginResponse(responseMsg commen.ResponseMessage) (err error) {
 func dealRegisterResponse(responseMsg commen.ResponseMessage) (err error) {
 	switch responseMsg.Code {
 	case 200:
-		fmt.Printf("Register succeed!\n")
+		logger.Success("Register succeed!\n")
 	case 500:
 		err = errors.New("server error")
 	case 403:
@@ -61,7 +62,8 @@ func dealGroupMessage(responseMsg commen.ResponseMessage) (err error) {
 	if err != nil {
 		return
 	}
-	fmt.Printf("%v send say you: %v\n", groupMessage.UserName, groupMessage.Content)
+	logger.Info("%v send you:", groupMessage.UserName)
+	logger.Notice("\t%v\n", groupMessage.Content)
 	return
 }
 
@@ -77,10 +79,10 @@ func showAllOnlineUsersList(responseMsg commen.ResponseMessage) (err error) {
 		return
 	}
 
-	fmt.Printf("On line user list(%v users)\n", len(userList))
-	fmt.Printf("\t\tID\t\tname\n")
+	logger.Success("On line user list(%v users)\n", len(userList))
+	logger.Notice("\t\tID\t\tname\n")
 	for _, info := range userList {
-		fmt.Printf("\t\t%v\t\t%v\n", info.ID, info.UserName)
+		logger.Success("\t\t%v\t\t%v\n", info.ID, info.UserName)
 	}
 
 	return
@@ -98,7 +100,8 @@ func showPointToPointMesssage(responseMsg commen.ResponseMessage) (err error) {
 		return
 	}
 
-	fmt.Printf("\r\n\r\n%v say：\t%v\n", pointToPointMessage.SourceUserName, pointToPointMessage.Content)
+	logger.Info("\r\n\r\n%v say: ", pointToPointMessage.SourceUserName)
+	logger.Notice("\t%v\n", pointToPointMessage.Content)
 	return
 }
 
@@ -110,7 +113,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 	for {
 		responseMsg, err = dispatcher.ReadDate()
 		if err != nil {
-			fmt.Printf("waiting response error: %v\n", err)
+			logger.Error("waiting response error: %v\n", err)
 			return
 		}
 
@@ -125,7 +128,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 		case commen.SendGroupMessageToClientType:
 			err = dealGroupMessage(responseMsg)
 			if err != nil {
-				fmt.Printf("%v\n", err)
+				logger.Error("%v\n", err)
 			}
 		case commen.ShowAllOnlineUsersType:
 			err = showAllOnlineUsersList(responseMsg)
@@ -134,7 +137,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 			err = showPointToPointMesssage(responseMsg)
 			errMsg <- err
 		default:
-			fmt.Println("un")
+			logger.Error("un")
 		}
 
 		if err != nil {
