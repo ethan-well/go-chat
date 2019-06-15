@@ -102,13 +102,14 @@ func showPointToPointMesssage(responseMsg commen.ResponseMessage) (err error) {
 }
 
 // 处理服务端的返回
-func Response(conn net.Conn) (err error) {
+func Response(conn net.Conn, errMsg chan error) (err error) {
 	var responseMsg commen.ResponseMessage
 	dispatcher := utils.Dispatcher{Conn: conn}
 
 	for {
 		responseMsg, err = dispatcher.ReadDate()
 		if err != nil {
+			fmt.Printf("waiting response error: %v\n", err)
 			return
 		}
 
@@ -116,6 +117,7 @@ func Response(conn net.Conn) (err error) {
 		switch responseMsg.Type {
 		case commen.LoginResponseMessageType:
 			err = dealLoginResponse(responseMsg)
+			errMsg <- err
 		case commen.RegisterResponseMessageType:
 			err = dealRegisterResponse(responseMsg)
 			if err != nil {

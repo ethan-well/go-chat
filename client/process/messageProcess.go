@@ -68,7 +68,12 @@ func (msg MessageProcess) GetOnlineUerList() (err error) {
 		return
 	}
 
-	go Response(conn)
+	errMsg := make(chan error)
+	go Response(conn, errMsg)
+	err = <-errMsg
+	if err != nil {
+		return
+	}
 
 	for {
 		showAfterLoginMenu()

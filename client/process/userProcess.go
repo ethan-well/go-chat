@@ -99,7 +99,10 @@ func (up UserProcess) Login(userName, password string) (err error) {
 		return
 	}
 
-	err = Response(conn)
+	errMsg := make(chan error)
+	go Response(conn, errMsg)
+	err = <-errMsg
+
 	if err != nil {
 		return
 	}
@@ -154,7 +157,9 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 		return
 	}
 
-	go Response(conn)
+	errMsg := make(chan error)
+	go Response(conn, errMsg)
+	err = <-errMsg
 
 	return
 }
