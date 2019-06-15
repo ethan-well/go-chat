@@ -47,15 +47,15 @@ type RegisterMessage struct {
 }
 
 type UserSendGroupMessage struct {
-	GroupID int    // 目标组 id
-	UserID  int    // 当前用户 id
-	Content string // 小心主体内容
+	GroupID  int    // target group id, 0 => all users
+	UserName string // current user name
+	Content  string // message content
 }
 
 type SendGroupMessageToClient struct {
-	GroupID int
-	UserID  int
-	Content string
+	GroupID  int    // group id, 0 => all users
+	UserName string // current user
+	Content  string // message
 }
 
 type PointToPointMessage struct {

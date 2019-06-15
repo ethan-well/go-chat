@@ -61,7 +61,7 @@ func dealGroupMessage(responseMsg commen.ResponseMessage) (err error) {
 	if err != nil {
 		return
 	}
-	fmt.Printf("%v send message: %v\n", groupMessage.UserID, groupMessage.Content)
+	fmt.Printf("%v send say you: %v\n", groupMessage.UserName, groupMessage.Content)
 	return
 }
 

@@ -10,7 +10,7 @@ import (
 type MessageProcess struct{}
 
 // user send message to server
-func (msgProc MessageProcess) SendGroupMessageToServer(groupID, userID int, content string) (err error) {
+func (msgProc MessageProcess) SendGroupMessageToServer(groupID int, userName string, content string) (err error) {
 	// connect server
 	conn, err := net.Dial("tcp", "localhost:8888")
 
@@ -23,9 +23,9 @@ func (msgProc MessageProcess) SendGroupMessageToServer(groupID, userID int, cont
 
 	// group message
 	userSendGroupMessage := commen.UserSendGroupMessage{
-		GroupID: groupID,
-		UserID:  userID,
-		Content: content,
+		GroupID:  groupID,
+		UserName: userName,
+		Content:  content,
 	}
 	data, err := json.Marshal(userSendGroupMessage)
 	if err != nil {

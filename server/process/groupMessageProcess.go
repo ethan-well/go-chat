@@ -10,7 +10,7 @@ import (
 
 type GroupMessageProcess struct{}
 
-// 向组内不人员发送消息
+// 向组内人员发送消息
 func (gmp GroupMessageProcess) sendToGroupUsers(message string) (err error) {
 	// var info commen.UserSendGroupMessage
 	// err = json.Unmarshal([]byte(message), &info)

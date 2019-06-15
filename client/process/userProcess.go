@@ -38,8 +38,9 @@ func showAfterLoginMenu() {
 	case 2:
 		fmt.Println("Say something:")
 		fmt.Scanf("%s\n", &content)
+		currentUser := model.CurrentUser
 		messageProcess := MessageProcess{}
-		err := messageProcess.SendGroupMessageToServer(1, 1, content)
+		err := messageProcess.SendGroupMessageToServer(0, currentUser.UserName, content)
 		if err != nil {
 			fmt.Printf("some error when send data to server: %v\n", err)
 		}
