@@ -70,7 +70,22 @@ go build -o server go-chat/server/main
 4. 私聊某一个用户
 5. 按照消息的类型(info, notice, warn, error, success) 使用不同的颜色打印消息（Unix 和 window 均支持）
 
-------------------------------------------------------------------------------------------------------------------------------
+## 项目效果图
+### 注册
+![sign-up](https://github.com/ItsWewin/images/raw/master/Chat/sign-up.png)
+
+### 登陆
+![sign-in](https://raw.githubusercontent.com/ItsWewin/images/master/Chat/sign-in.png)
+
+### 显示在线用户列表
+![online-user-list](https://github.com/ItsWewin/images/raw/master/Chat/online-user-list.png)
+### 群聊
+![group-message-1.png](https://github.com/ItsWewin/images/raw/master/Chat/group-message-1.png)
+![group-message-2.png](https://github.com/ItsWewin/images/raw/master/Chat/group-message-2.png)
+### 私聊
+![point-to-point.png](https://github.com/ItsWewin/images/raw/master/Chat/point-to-point.png)
+![point-to-point2.png](https://github.com/ItsWewin/images/raw/master/Chat/point-to-point2.png)
+
 ------------------------------------------------------------------------------------------------------------------------------
 
 # English
