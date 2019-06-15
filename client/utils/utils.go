@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"go-chat/client/logger"
-	commen "go-chat/commen/message"
+	common "go-chat/common/message"
 	"net"
 )
 
@@ -14,7 +14,7 @@ type Dispatcher struct {
 	Buf  [10240]byte
 }
 
-func (dispatcher Dispatcher) ReadDate() (msg commen.ResponseMessage, err error) {
+func (dispatcher Dispatcher) ReadDate() (msg common.ResponseMessage, err error) {
 	buf := make([]byte, 10240)
 
 	// 读取消息长度信息

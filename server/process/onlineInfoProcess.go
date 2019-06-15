@@ -3,7 +3,7 @@ package process
 import (
 	"encoding/json"
 	"fmt"
-	commen "go-chat/commen/message"
+	common "go-chat/common/message"
 	"go-chat/server/model"
 	"go-chat/server/utils"
 	"net"
@@ -13,7 +13,7 @@ type OnlineInfoProcess struct {
 	Conn net.Conn
 }
 
-type UserInfo = commen.UserInfo
+type UserInfo = common.UserInfo
 
 func (this OnlineInfoProcess) showAllOnlineUserList() (err error) {
 	var onlineUserList []UserInfo
@@ -30,7 +30,7 @@ func (this OnlineInfoProcess) showAllOnlineUserList() (err error) {
 	data, err := json.Marshal(onlineUserList)
 
 	if err != nil {
-		code = commen.ServerError
+		code = common.ServerError
 	} else {
 		code = 200
 	}
@@ -43,9 +43,9 @@ func (this OnlineInfoProcess) showAllOnlineUserList() (err error) {
 }
 
 func responseClient(conn net.Conn, code int, data string, errMsg string) (err error) {
-	responseMessage := commen.ResponseMessage{
+	responseMessage := common.ResponseMessage{
 		Code:  code,
-		Type:  commen.ShowAllOnlineUsersType,
+		Type:  common.ShowAllOnlineUsersType,
 		Data:  data,
 		Error: errMsg,
 	}

@@ -3,7 +3,7 @@ package process
 import (
 	"encoding/json"
 	"fmt"
-	commen "go-chat/commen/message"
+	common "go-chat/common/message"
 	"go-chat/server/model"
 	"go-chat/server/utils"
 	"net"
@@ -26,7 +26,7 @@ func login(userName, passWord string) (user model.User, err error) {
 
 // 响应客户端
 func (this *UserProcess) responseClient(responseMessageType string, code int, data string, err error) {
-	var responseMessage commen.ResponseMessage
+	var responseMessage common.ResponseMessage
 	responseMessage.Code = code
 	responseMessage.Type = responseMessageType
 	responseMessage.Data = data
@@ -42,18 +42,18 @@ func (this *UserProcess) responseClient(responseMessageType string, code int, da
 }
 
 func (this *UserProcess) UserRegister(message string) (err error) {
-	var info commen.RegisterMessage
+	var info common.RegisterMessage
 	var code int
 	data := ""
 	err = json.Unmarshal([]byte(message), &info)
 	if err != nil {
-		code = commen.ServerError
+		code = common.ServerError
 	}
 
 	_, err = register(info.UserName, info.Password, info.PasswordConfirm)
 	switch err {
 	case nil:
-		code = commen.RegisterSucceed
+		code = common.RegisterSucceed
 	case model.ERROR_PASSWORD_NOT_MATCH:
 		code = 402
 	case model.ERROR_USER_EXISTED:
@@ -61,29 +61,29 @@ func (this *UserProcess) UserRegister(message string) (err error) {
 	default:
 		code = 500
 	}
-	this.responseClient(commen.RegisterResponseMessageType, code, data, err)
+	this.responseClient(common.RegisterResponseMessageType, code, data, err)
 	return
 }
 
 func (this *UserProcess) UserLogin(message string) (err error) {
-	var info commen.LoginMessage
+	var info common.LoginMessage
 	var code int
 	var data string
 	err = json.Unmarshal([]byte(message), &info)
 	if err != nil {
-		code = commen.ServerError
+		code = common.ServerError
 	}
 
 	user, err := login(info.UserName, info.Password)
 
 	switch err {
 	case nil:
-		code = commen.LoginSucceed
+		code = common.LoginSucceed
 		// save user conn status
 		clientConn := model.ClientConn{}
 		clientConn.Save(user.ID, user.Name, this.Conn)
 
-		userInfo := commen.UserInfo{user.ID, user.Name}
+		userInfo := common.UserInfo{user.ID, user.Name}
 		info, _ := json.Marshal(userInfo)
 		data = string(info)
 	case model.ERROR_USER_NOT_EXISTS:
@@ -93,6 +93,6 @@ func (this *UserProcess) UserLogin(message string) (err error) {
 	default:
 		code = 500
 	}
-	this.responseClient(commen.LoginResponseMessageType, code, data, err)
+	this.responseClient(common.LoginResponseMessageType, code, data, err)
 	return
 }

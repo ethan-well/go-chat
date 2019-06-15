@@ -7,7 +7,7 @@ import (
 	"go-chat/client/logger"
 	"go-chat/client/model"
 	"go-chat/client/utils"
-	commen "go-chat/commen/message"
+	common "go-chat/common/message"
 	"net"
 	"os"
 )
@@ -85,10 +85,10 @@ func (up UserProcess) Login(userName, password string) (err error) {
 		return
 	}
 
-	var message commen.Message
-	message.Type = commen.LoginMessageType
+	var message common.Message
+	message.Type = common.LoginMessageType
 	// 生成 loginMessage
-	var loginMessage commen.LoginMessage
+	var loginMessage common.LoginMessage
 	loginMessage.UserName = userName
 	loginMessage.Password = password
 
@@ -103,7 +103,7 @@ func (up UserProcess) Login(userName, password string) (err error) {
 	// 首先发送数据 data 的长度到服务器端
 	// 将一个字符串的长度转为一个表示长度的切片
 	message.Data = string(data)
-	message.Type = commen.LoginMessageType
+	message.Type = common.LoginMessageType
 	data, _ = json.Marshal(message)
 
 	dispatcher := utils.Dispatcher{Conn: conn}
@@ -140,10 +140,10 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 	}
 
 	// 定义消息
-	var messsage commen.Message
+	var messsage common.Message
 
 	// 生成 registerMessage
-	var registerMessage commen.RegisterMessage
+	var registerMessage common.RegisterMessage
 	registerMessage.UserName = userName
 	registerMessage.Password = password
 	registerMessage.PasswordConfirm = password_confirm
@@ -155,7 +155,7 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 
 	// 构造需要传递给服务器的数据
 	messsage.Data = string(data)
-	messsage.Type = commen.RegisterMessageType
+	messsage.Type = common.RegisterMessageType
 
 	data, err = json.Marshal(messsage)
 	if err != nil {

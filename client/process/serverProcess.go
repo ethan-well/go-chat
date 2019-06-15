@@ -6,15 +6,15 @@ import (
 	"go-chat/client/logger"
 	"go-chat/client/model"
 	"go-chat/client/utils"
-	commen "go-chat/commen/message"
+	common "go-chat/common/message"
 	"net"
 )
 
-func dealLoginResponse(responseMsg commen.ResponseMessage) (err error) {
+func dealLoginResponse(responseMsg common.ResponseMessage) (err error) {
 	switch responseMsg.Code {
 	case 200:
 		// 解析当前用户信息
-		var userInfo commen.UserInfo
+		var userInfo common.UserInfo
 		err = json.Unmarshal([]byte(responseMsg.Data), &userInfo)
 		if err != nil {
 			return
@@ -40,7 +40,7 @@ func dealLoginResponse(responseMsg commen.ResponseMessage) (err error) {
 	return
 }
 
-func dealRegisterResponse(responseMsg commen.ResponseMessage) (err error) {
+func dealRegisterResponse(responseMsg common.ResponseMessage) (err error) {
 	switch responseMsg.Code {
 	case 200:
 		logger.Success("Register succeed!\n")
@@ -56,8 +56,8 @@ func dealRegisterResponse(responseMsg commen.ResponseMessage) (err error) {
 	return
 }
 
-func dealGroupMessage(responseMsg commen.ResponseMessage) (err error) {
-	var groupMessage commen.SendGroupMessageToClient
+func dealGroupMessage(responseMsg common.ResponseMessage) (err error) {
+	var groupMessage common.SendGroupMessageToClient
 	err = json.Unmarshal([]byte(responseMsg.Data), &groupMessage)
 	if err != nil {
 		return
@@ -67,13 +67,13 @@ func dealGroupMessage(responseMsg commen.ResponseMessage) (err error) {
 	return
 }
 
-func showAllOnlineUsersList(responseMsg commen.ResponseMessage) (err error) {
+func showAllOnlineUsersList(responseMsg common.ResponseMessage) (err error) {
 	if responseMsg.Code != 200 {
 		err = errors.New("Server Error!")
 		return
 	}
 
-	var userList []commen.UserInfo
+	var userList []common.UserInfo
 	err = json.Unmarshal([]byte(responseMsg.Data), &userList)
 	if err != nil {
 		return
@@ -88,13 +88,13 @@ func showAllOnlineUsersList(responseMsg commen.ResponseMessage) (err error) {
 	return
 }
 
-func showPointToPointMesssage(responseMsg commen.ResponseMessage) (err error) {
+func showPointToPointMesssage(responseMsg common.ResponseMessage) (err error) {
 	if responseMsg.Code != 200 {
 		err = errors.New(responseMsg.Error)
 		return
 	}
 
-	var pointToPointMessage commen.PointToPointMessage
+	var pointToPointMessage common.PointToPointMessage
 	err = json.Unmarshal([]byte(responseMsg.Data), &pointToPointMessage)
 	if err != nil {
 		return
@@ -107,7 +107,7 @@ func showPointToPointMesssage(responseMsg commen.ResponseMessage) (err error) {
 
 // 处理服务端的返回
 func Response(conn net.Conn, errMsg chan error) (err error) {
-	var responseMsg commen.ResponseMessage
+	var responseMsg common.ResponseMessage
 	dispatcher := utils.Dispatcher{Conn: conn}
 
 	for {
@@ -119,21 +119,21 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 
 		// 根据服务端返回的消息类型，进行相应的处理
 		switch responseMsg.Type {
-		case commen.LoginResponseMessageType:
+		case common.LoginResponseMessageType:
 			err = dealLoginResponse(responseMsg)
 			errMsg <- err
-		case commen.RegisterResponseMessageType:
+		case common.RegisterResponseMessageType:
 			err = dealRegisterResponse(responseMsg)
 			errMsg <- err
-		case commen.SendGroupMessageToClientType:
+		case common.SendGroupMessageToClientType:
 			err = dealGroupMessage(responseMsg)
 			if err != nil {
 				logger.Error("%v\n", err)
 			}
-		case commen.ShowAllOnlineUsersType:
+		case common.ShowAllOnlineUsersType:
 			err = showAllOnlineUsersList(responseMsg)
 			errMsg <- err
-		case commen.PointToPointMessageType:
+		case common.PointToPointMessageType:
 			err = showPointToPointMesssage(responseMsg)
 			errMsg <- err
 		default:

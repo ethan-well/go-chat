@@ -3,7 +3,7 @@ package process
 import (
 	"encoding/json"
 	"fmt"
-	commen "go-chat/commen/message"
+	common "go-chat/common/message"
 	"go-chat/server/model"
 	"go-chat/server/utils"
 	"net"
@@ -12,7 +12,7 @@ import (
 type PointToPointMessageProcess struct{}
 
 func (this PointToPointMessageProcess) sendMessageToTargetUser(message string) (err error) {
-	var pointToPointMessage commen.PointToPointMessage
+	var pointToPointMessage common.PointToPointMessage
 	err = json.Unmarshal([]byte(message), &pointToPointMessage)
 	if err != nil {
 		return
@@ -24,10 +24,10 @@ func (this PointToPointMessageProcess) sendMessageToTargetUser(message string) (
 		return
 	}
 
-	var responseMessage commen.ResponseMessage
-	responseMessage.Type = commen.PointToPointMessageType
+	var responseMessage common.ResponseMessage
+	responseMessage.Type = common.PointToPointMessageType
 
-	var responseMessageData = commen.PointToPointMessage{
+	var responseMessageData = common.PointToPointMessage{
 		SourceUserName: pointToPointMessage.SourceUserName,
 		TargetUserName: pointToPointMessage.TargetUserName,
 		Content:        pointToPointMessage.Content,
@@ -53,9 +53,9 @@ func (this PointToPointMessageProcess) sendMessageToTargetUser(message string) (
 }
 
 func (this *PointToPointMessageProcess) responseClient(conn net.Conn, code int, data string, popErr error) (err error) {
-	responseMessage := commen.ResponseMessage{
+	responseMessage := common.ResponseMessage{
 		Code:  code,
-		Type:  commen.PointToPointMessageType,
+		Type:  common.PointToPointMessageType,
 		Error: fmt.Sprintf("%v", popErr),
 		Data:  data,
 	}

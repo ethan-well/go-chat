@@ -1,4 +1,4 @@
-package commen
+package common
 
 const (
 	LoginMessageType             = "LoginMessage"

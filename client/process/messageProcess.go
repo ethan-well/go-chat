@@ -3,7 +3,7 @@ package process
 import (
 	"encoding/json"
 	"go-chat/client/utils"
-	commen "go-chat/commen/message"
+	common "go-chat/common/message"
 	"net"
 )
 
@@ -18,11 +18,11 @@ func (msgProc MessageProcess) SendGroupMessageToServer(groupID int, userName str
 		return
 	}
 
-	var message commen.Message
-	message.Type = commen.UserSendGroupMessageType
+	var message common.Message
+	message.Type = common.UserSendGroupMessageType
 
 	// group message
-	userSendGroupMessage := commen.UserSendGroupMessage{
+	userSendGroupMessage := common.UserSendGroupMessage{
 		GroupID:  groupID,
 		UserName: userName,
 		Content:  content,
@@ -48,8 +48,8 @@ func (msg MessageProcess) GetOnlineUerList() (err error) {
 		return
 	}
 
-	var message = commen.Message{}
-	message.Type = commen.ShowAllOnlineUsersType
+	var message = common.Message{}
+	message.Type = common.ShowAllOnlineUsersType
 
 	requestBody, err := json.Marshal("")
 	if err != nil {
@@ -89,11 +89,11 @@ func (msgProc MessageProcess) PointToPointCommunication(targetUserName, sourceUs
 	}
 	// defer conn.Close()
 
-	var pointToPointMessage commen.Message
+	var pointToPointMessage common.Message
 
-	pointToPointMessage.Type = commen.PointToPointMessageType
+	pointToPointMessage.Type = common.PointToPointMessageType
 
-	messageBody := commen.PointToPointMessage{
+	messageBody := common.PointToPointMessage{
 		SourceUserName: sourceUserName,
 		TargetUserName: targetUserName,
 		Content:        message,

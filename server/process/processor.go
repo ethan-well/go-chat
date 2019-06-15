@@ -2,7 +2,7 @@ package process
 
 import (
 	"fmt"
-	commen "go-chat/commen/message"
+	common "go-chat/common/message"
 	"go-chat/server/model"
 	"go-chat/server/utils"
 	"io"
@@ -15,31 +15,31 @@ type Processor struct {
 
 // 处理消息
 // 根据消息的类型，使用对应的处理方式
-func (this *Processor) messgeProcess(message commen.Message) (err error) {
+func (this *Processor) messgeProcess(message common.Message) (err error) {
 	switch message.Type {
-	case commen.LoginMessageType:
+	case common.LoginMessageType:
 		up := UserProcess{Conn: this.Conn}
 		err = up.UserLogin(message.Data)
 		if err != nil {
 			fmt.Printf("some error: %v\n", err)
 		}
-	case commen.RegisterMessageType:
+	case common.RegisterMessageType:
 		up := UserProcess{Conn: this.Conn}
 		err = up.UserRegister(message.Data)
 		if err != nil {
 			fmt.Printf("some error when register: %v\n", err)
 		}
-	case commen.UserSendGroupMessageType:
+	case common.UserSendGroupMessageType:
 		fmt.Println("user send group message!")
 		gmp := GroupMessageProcess{}
 		gmp.sendToGroupUsers(message.Data)
-	case commen.ShowAllOnlineUsersType:
+	case common.ShowAllOnlineUsersType:
 		olP := OnlineInfoProcess{this.Conn}
 		err = olP.showAllOnlineUserList()
 		if err != nil {
 			fmt.Println("get all online user list error: %v\n", err)
 		}
-	case commen.PointToPointMessageType:
+	case common.PointToPointMessageType:
 		fmt.Println("point to point comminite!")
 		pop := PointToPointMessageProcess{}
 		err = pop.sendMessageToTargetUser(message.Data)

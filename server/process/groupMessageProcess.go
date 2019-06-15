@@ -3,7 +3,7 @@ package process
 import (
 	"encoding/json"
 	"fmt"
-	commen "go-chat/commen/message"
+	common "go-chat/common/message"
 	"go-chat/server/model"
 	"go-chat/server/utils"
 )
@@ -12,9 +12,9 @@ type GroupMessageProcess struct{}
 
 // send messsage to all user in the target group
 func (gmp GroupMessageProcess) sendToGroupUsers(message string) (err error) {
-	// var info commen.UserSendGroupMessage
+	// var info common.UserSendGroupMessage
 	// err = json.Unmarshal([]byte(message), &info)
-	var userSendGroupMessage commen.UserSendGroupMessage
+	var userSendGroupMessage common.UserSendGroupMessage
 	err = json.Unmarshal([]byte(message), &userSendGroupMessage)
 	if err != nil {
 		fmt.Printf("some error when  json Unmarshal: %v\n", err)
@@ -23,8 +23,8 @@ func (gmp GroupMessageProcess) sendToGroupUsers(message string) (err error) {
 	// group message sender
 	sourceUserName := userSendGroupMessage.UserName
 
-	var toClientMessage commen.ResponseMessage
-	toClientMessage.Type = commen.SendGroupMessageToClientType
+	var toClientMessage common.ResponseMessage
+	toClientMessage.Type = common.SendGroupMessageToClientType
 	toClientMessage.Data = message
 
 	data, err := json.Marshal(toClientMessage)

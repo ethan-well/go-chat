@@ -16,7 +16,7 @@
 │   │   └── userProcess.go
 │   └── utils
 │       └── utils.go
-├── commen // 客户端和服务端公用代码，主要用来定义客户端和服务端之间通信约定的消息
+├── common // 客户端和服务端公用代码，主要用来定义客户端和服务端之间通信约定的消息
 │   └── message
 │       └── message.go
 └── server // 服务端代码
@@ -34,11 +34,11 @@
     │   ├── pointToPointMessageProcess.go // 处理点对点聊天消息
     │   ├── processor.go // 消息处理器入口
     │   └── userProcess.go // 处理和用户登陆注册相关消息
-    └── utils 
+    └── utils
         └── utils.go
 ```
 
-服务端和客户端代码基本独立，server 目录下是服务端代码，client 目录下是客户端代码，commen 目录下的包由服务端和客户端共同使用
+服务端和客户端代码基本独立，server 目录下是服务端代码，client 目录下是客户端代码，common 目录下的包由服务端和客户端共同使用
 
 ## 本地运行本项目(Unix 系统下)
 ### 下载项目

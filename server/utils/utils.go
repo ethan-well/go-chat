@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	commen "go-chat/commen/message"
+	common "go-chat/common/message"
 	"net"
 )
 
@@ -14,7 +14,7 @@ type Dispatcher struct {
 	Buf  [10240]byte
 }
 
-func (dispatcher Dispatcher) ReadData() (message commen.Message, err error) {
+func (dispatcher Dispatcher) ReadData() (message common.Message, err error) {
 	buf := dispatcher.Buf
 
 	// 读取消息长度信息
