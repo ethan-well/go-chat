@@ -88,7 +88,7 @@ func showAllOnlineUsersList(responseMsg commen.ResponseMessage) (err error) {
 
 func showPointToPointMesssage(responseMsg commen.ResponseMessage) (err error) {
 	if responseMsg.Code != 200 {
-		err = errors.New("Server Error!")
+		err = errors.New(responseMsg.Error)
 		return
 	}
 
@@ -134,9 +134,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 			errMsg <- err
 		case commen.PointToPointMessageType:
 			err = showPointToPointMesssage(responseMsg)
-			if err != nil {
-				fmt.Printf("get point to point message error; %v", err)
-			}
+			errMsg <- err
 		default:
 			fmt.Println("un")
 		}

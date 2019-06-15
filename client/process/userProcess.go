@@ -15,7 +15,7 @@ type UserProcess struct{}
 
 // 登陆成功菜单显示：
 func showAfterLoginMenu() {
-	fmt.Println("----------------login succeed!----------------")
+	fmt.Println("\n----------------login succeed!----------------")
 	fmt.Println("\t\tselect what you want to do")
 	fmt.Println("\t\t1. Show all online users")
 	fmt.Println("\t\t2. Send group message")
@@ -49,15 +49,24 @@ func showAfterLoginMenu() {
 	case 3:
 		var targetUserName, message string
 
-		fmt.Println("select one friend")
+		fmt.Println("Select one friend by user name")
 		fmt.Scanf("%s\n", &targetUserName)
 		fmt.Println("Input message:")
 		fmt.Scanf("%s\n", &message)
 
 		messageProcess := MessageProcess{}
-		err := messageProcess.PointToPointCommunication(targetUserName, model.CurrentUser.UserName, message)
+		conn, err := messageProcess.PointToPointCommunication(targetUserName, model.CurrentUser.UserName, message)
 		if err != nil {
 			fmt.Printf("some error when point to point comunication: %v\n", err)
+			return
+		}
+
+		errMsg := make(chan error)
+		go Response(conn, errMsg)
+		err = <-errMsg
+
+		if err.Error() != "<nil>" {
+			fmt.Printf("send message errror: %v\n", err)
 		}
 	case 4:
 		fmt.Println("Exit...")
