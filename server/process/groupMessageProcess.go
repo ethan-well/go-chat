@@ -10,10 +10,19 @@ import (
 
 type GroupMessageProcess struct{}
 
-// 向组内人员发送消息
+// send messsage to all user in the target group
 func (gmp GroupMessageProcess) sendToGroupUsers(message string) (err error) {
 	// var info commen.UserSendGroupMessage
 	// err = json.Unmarshal([]byte(message), &info)
+	var userSendGroupMessage commen.UserSendGroupMessage
+	err = json.Unmarshal([]byte(message), &userSendGroupMessage)
+	if err != nil {
+		fmt.Printf("some error when  json Unmarshal: %v\n", err)
+	}
+
+	// group message sender
+	sourceUserName := userSendGroupMessage.UserName
+
 	var toClientMessage commen.ResponseMessage
 	toClientMessage.Type = commen.SendGroupMessageToClientType
 	toClientMessage.Data = message
@@ -24,6 +33,11 @@ func (gmp GroupMessageProcess) sendToGroupUsers(message string) (err error) {
 	}
 
 	for id, connInfo := range model.ClientConnsMap {
+		// do not send message to then sender
+		if sourceUserName == connInfo.UserName {
+			continue
+		}
+
 		fmt.Printf("client id: %v \n", id)
 
 		dispatcher := utils.Dispatcher{Conn: connInfo.Conn}

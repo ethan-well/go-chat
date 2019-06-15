@@ -42,7 +42,9 @@ func showAfterLoginMenu() {
 		messageProcess := MessageProcess{}
 		err := messageProcess.SendGroupMessageToServer(0, currentUser.UserName, content)
 		if err != nil {
-			fmt.Printf("some error when send data to server: %v\n", err)
+			fmt.Printf("Some error when send data to server: %v\n", err)
+		} else {
+			fmt.Printf("Send group message succeed!\n\n")
 		}
 	case 3:
 		var targetUserName, message string
