@@ -77,7 +77,7 @@ func showAllOnlineUsersList(responseMsg commen.ResponseMessage) (err error) {
 		return
 	}
 
-	fmt.Println("On line user list")
+	fmt.Printf("On line user list(%v users)\n", len(userList))
 	fmt.Printf("\t\tID\t\tname\n")
 	for _, info := range userList {
 		fmt.Printf("\t\t%v\t\t%v\n", info.ID, info.UserName)

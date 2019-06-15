@@ -21,7 +21,7 @@ func main() {
 		fmt.Println("\t\t\t 2、Sign up")
 		fmt.Println("\t\t\t 3、Exit the system")
 
-		// 获取用户输入
+		// get user input
 		fmt.Scanf("%d\n", &key)
 		switch key {
 		case 1:
@@ -56,7 +56,7 @@ func main() {
 			}
 		case 3:
 			fmt.Println("Exit...")
-			loop = false // 等价 os.Exit(0)
+			loop = false // this is equal to 'os.Exit(0)'
 		default:
 			fmt.Printf("Select is invalid!\n")
 		}
