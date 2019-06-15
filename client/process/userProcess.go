@@ -27,14 +27,16 @@ func showAfterLoginMenu() {
 	fmt.Scanf("%d\n", &key)
 	switch key {
 	case 1:
-		fmt.Println("Show all online users")
 		messageProcess := MessageProcess{}
 		err := messageProcess.GetOnlineUerList()
+		fmt.Printf("some all on line user!!!!!!")
 		if err != nil {
 			fmt.Printf("some error when get online user list, error: %v\n", err)
 		}
+		fmt.Printf("some all on line user!!!!!!")
+		return
 	case 2:
-		fmt.Println("Say some thing!")
+		fmt.Println("Say something:")
 		fmt.Scanf("%s\n", &content)
 		messageProcess := MessageProcess{}
 		err := messageProcess.SendGroupMessageToServer(1, 1, content)

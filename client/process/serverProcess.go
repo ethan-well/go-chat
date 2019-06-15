@@ -82,6 +82,7 @@ func showAllOnlineUsersList(responseMsg commen.ResponseMessage) (err error) {
 	for _, info := range userList {
 		fmt.Printf("\t\t%v\t\t%v\n", info.ID, info.UserName)
 	}
+
 	return
 }
 
@@ -130,9 +131,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 			}
 		case commen.ShowAllOnlineUsersType:
 			err = showAllOnlineUsersList(responseMsg)
-			if err != nil {
-				fmt.Printf("some error when get online user info: %v\n", err)
-			}
+			errMsg <- err
 		case commen.PointToPointMessageType:
 			err = showPointToPointMesssage(responseMsg)
 			if err != nil {
