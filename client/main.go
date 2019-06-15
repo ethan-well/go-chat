@@ -43,11 +43,11 @@ func main() {
 			}
 		case 2:
 			logger.Info("Create account\n")
-			logger.Info("user name：\n")
+			logger.Notice("user name：\n")
 			fmt.Scanf("%s\n", &userName)
-			logger.Info("password：\n")
+			logger.Notice("password：\n")
 			fmt.Scanf("%s\n", &password)
-			logger.Info("password confirm：\n")
+			logger.Notice("password confirm：\n")
 			fmt.Scanf("%s\n", &password_confirm)
 
 			up := process.UserProcess{}
