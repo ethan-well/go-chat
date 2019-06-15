@@ -121,9 +121,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 			errMsg <- err
 		case commen.RegisterResponseMessageType:
 			err = dealRegisterResponse(responseMsg)
-			if err != nil {
-				fmt.Printf("%v\n", err)
-			}
+			errMsg <- err
 		case commen.SendGroupMessageToClientType:
 			err = dealGroupMessage(responseMsg)
 			if err != nil {

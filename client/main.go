@@ -15,7 +15,7 @@ func main() {
 	)
 
 	for loop {
-		fmt.Println("----------------Welcome to the chat room--------------")
+		fmt.Println("\n----------------Welcome to the chat room--------------")
 		fmt.Println("\t\tSelect the options：")
 		fmt.Println("\t\t\t 1、Sign in")
 		fmt.Println("\t\t\t 2、Sign up")
@@ -52,9 +52,8 @@ func main() {
 			up := process.UserProcess{}
 			err := up.Register(userName, password, password_confirm)
 			if err != nil {
-				fmt.Printf("Creae account failed")
+				fmt.Printf("Creae account failed: %v\n", err)
 			}
-			loop = false
 		case 3:
 			fmt.Println("Exit...")
 			loop = false // 等价 os.Exit(0)
