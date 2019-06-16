@@ -56,7 +56,7 @@ go build -o server go-chat/server/main
 ```
 #### 编译并运行客户端代码
 ```
-go build -o server go-chat/server/main
+go build -o server go-chat/client
 ./server
 ```
 
