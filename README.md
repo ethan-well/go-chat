@@ -115,8 +115,8 @@ go build -o client go-chat/client
 ```
 
 ### Function of this demo
-1. user register
-2. user login
-3. user send group message
-4. show online user list
-5. point-to-point communication
+1. User register
+2. User login
+3. User send group message
+4. Show online user list
+5. Point-to-point communication

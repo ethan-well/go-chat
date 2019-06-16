@@ -54,9 +54,9 @@ func (this *UserProcess) UserRegister(message string) (err error) {
 	switch err {
 	case nil:
 		code = common.RegisterSucceed
-	case model.ERROR_PASSWORD_NOT_MATCH:
+	case model.ERROR_PASSWORD_DOES_NOT_MATCH:
 		code = 402
-	case model.ERROR_USER_EXISTED:
+	case model.ERROR_USER_ALREADY_EXISTS:
 		code = 403
 	default:
 		code = 500
@@ -86,7 +86,7 @@ func (this *UserProcess) UserLogin(message string) (err error) {
 		userInfo := common.UserInfo{user.ID, user.Name}
 		info, _ := json.Marshal(userInfo)
 		data = string(info)
-	case model.ERROR_USER_NOT_EXISTS:
+	case model.ERROR_USER_DOES_NOT_EXIST:
 		code = 404
 	case model.ERROR_USER_PWD:
 		code = 403

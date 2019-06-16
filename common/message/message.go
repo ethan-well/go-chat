@@ -18,9 +18,9 @@ const (
 	LoginSucceed = 200
 
 	// status code for register
-	HaveExisted       = 403
-	RegisterSucceed   = 200
-	PassworldNotMatch = 402
+	HasExited        = 403
+	RegisterSucceed  = 200
+	PasswordNotMatch = 402
 )
 
 type Message struct {

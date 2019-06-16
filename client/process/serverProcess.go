@@ -24,18 +24,18 @@ func dealLoginResponse(responseMsg common.ResponseMessage) (err error) {
 		user := model.User{}
 		err = user.InitCurrentUser(userInfo.ID, userInfo.UserName)
 		logger.Success("Login succeed!\n")
-		logger.Notice("current user, id: %d, name: %v\n", model.CurrentUser.UserID, model.CurrentUser.UserName)
+		logger.Notice("Current user, id: %d, name: %v\n", model.CurrentUser.UserID, model.CurrentUser.UserName)
 		if err != nil {
 			return
 		}
 	case 500:
-		err = errors.New("server error")
+		err = errors.New("Server error!")
 	case 404:
-		err = errors.New("user not exist")
+		err = errors.New("User does not exist!")
 	case 403:
-		err = errors.New("pasword not valide")
+		err = errors.New("Password invalid!")
 	default:
-		err = errors.New("some error")
+		err = errors.New("Some error!")
 	}
 	return
 }
@@ -45,13 +45,13 @@ func dealRegisterResponse(responseMsg common.ResponseMessage) (err error) {
 	case 200:
 		logger.Success("Register succeed!\n")
 	case 500:
-		err = errors.New("server error")
+		err = errors.New("Server error!")
 	case 403:
-		err = errors.New("user has already existed!")
+		err = errors.New("User already exists!")
 	case 402:
-		err = errors.New("pasword not match!")
+		err = errors.New("Password invalid!")
 	default:
-		err = errors.New("some error")
+		err = errors.New("Some error!")
 	}
 	return
 }
@@ -79,7 +79,7 @@ func showAllOnlineUsersList(responseMsg common.ResponseMessage) (err error) {
 		return
 	}
 
-	logger.Success("On line user list(%v users)\n", len(userList))
+	logger.Success("Online user list(%v users)\n", len(userList))
 	logger.Notice("\t\tID\t\tname\n")
 	for _, info := range userList {
 		logger.Success("\t\t%v\t\t%v\n", info.ID, info.UserName)
@@ -113,7 +113,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 	for {
 		responseMsg, err = dispatcher.ReadDate()
 		if err != nil {
-			logger.Error("waiting response error: %v\n", err)
+			logger.Error("Waiting response error: %v\n", err)
 			return
 		}
 
@@ -137,7 +137,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 			err = showPointToPointMesssage(responseMsg)
 			errMsg <- err
 		default:
-			logger.Error("un")
+			logger.Error("Unkown message type!")
 		}
 
 		if err != nil {

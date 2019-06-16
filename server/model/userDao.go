@@ -39,7 +39,7 @@ func (this *UserDao) GetUsrById(id int) (user User, err error) {
 
 	res, err := redis.String(conn.Do("hget", "users", id))
 	if err != nil {
-		err = ERROR_USER_NOT_EXISTS
+		err = ERROR_USER_DOES_NOT_EXIST
 		return
 	}
 	err = json.Unmarshal([]byte(res), &user)
@@ -59,7 +59,7 @@ func (this *UserDao) GetUsrByUserName(userName string) (user User, err error) {
 
 	res, err := redis.String(conn.Do("hget", "users", userName))
 	if err != nil {
-		err = ERROR_USER_NOT_EXISTS
+		err = ERROR_USER_DOES_NOT_EXIST
 		return
 	}
 	err = json.Unmarshal([]byte(res), &user)
@@ -75,15 +75,15 @@ func (this *UserDao) GetUsrByUserName(userName string) (user User, err error) {
 func (this *UserDao) Register(userName, password, passwordConfirm string) (user User, err error) {
 	// 判断密码是否正确
 	if password != passwordConfirm {
-		err = ERROR_PASSWORD_NOT_MATCH
+		err = ERROR_PASSWORD_DOES_NOT_MATCH
 		return
 	}
 
 	// 保证用户名不重复
 	user, err = this.GetUsrByUserName(userName)
 	if err == nil {
-		fmt.Printf("user name is existed!\n")
-		err = ERROR_USER_EXISTED
+		fmt.Printf("User already exists!\n")
+		err = ERROR_USER_ALREADY_EXISTS
 		return
 	}
 

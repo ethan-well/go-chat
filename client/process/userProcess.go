@@ -20,8 +20,8 @@ func showAfterLoginMenu() {
 	logger.Info("\t\tselect what you want to do\n")
 	logger.Info("\t\t1. Show all online users\n")
 	logger.Info("\t\t2. Send group message\n")
-	logger.Info("\t\t3. point-to-point communication\n")
-	logger.Info("\t\t4. exist\n")
+	logger.Info("\t\t3. Point-to-point communication\n")
+	logger.Info("\t\t4. Exit\n")
 	var key int
 	var content string
 
@@ -31,7 +31,7 @@ func showAfterLoginMenu() {
 		messageProcess := MessageProcess{}
 		err := messageProcess.GetOnlineUerList()
 		if err != nil {
-			logger.Error("some error when get online user list, error: %v\n", err)
+			logger.Error("Some error occured when get online user list, error: %v\n", err)
 		}
 		return
 	case 2:
@@ -41,7 +41,7 @@ func showAfterLoginMenu() {
 		messageProcess := MessageProcess{}
 		err := messageProcess.SendGroupMessageToServer(0, currentUser.UserName, content)
 		if err != nil {
-			logger.Error("Some error when send data to server: %v\n", err)
+			logger.Error("Some error occured when send data to server: %v\n", err)
 		} else {
 			logger.Success("Send group message succeed!\n\n")
 		}
@@ -56,7 +56,7 @@ func showAfterLoginMenu() {
 		messageProcess := MessageProcess{}
 		conn, err := messageProcess.PointToPointCommunication(targetUserName, model.CurrentUser.UserName, message)
 		if err != nil {
-			logger.Error("some error when point to point comunication: %v\n", err)
+			logger.Error("Some error occured when point to point comunication: %v\n", err)
 			return
 		}
 
@@ -65,13 +65,13 @@ func showAfterLoginMenu() {
 		err = <-errMsg
 
 		if err.Error() != "<nil>" {
-			logger.Error("send message errror: %v\n", err)
+			logger.Error("Send message errror: %v\n", err)
 		}
 	case 4:
 		logger.Warn("Exit...\n")
 		os.Exit(0)
 	default:
-		logger.Info("selected invalied!\n")
+		logger.Info("Selected invalied!\n")
 	}
 }
 
@@ -81,7 +81,7 @@ func (up UserProcess) Login(userName, password string) (err error) {
 	conn, err := net.Dial("tcp", "localhost:8888")
 
 	if err != nil {
-		logger.Error("connect server error: %v", err)
+		logger.Error("Connect server error: %v", err)
 		return
 	}
 
@@ -96,7 +96,7 @@ func (up UserProcess) Login(userName, password string) (err error) {
 	// 先序列话需要传到服务器的数据
 	data, err := json.Marshal(loginMessage)
 	if err != nil {
-		logger.Error("some error when parse you data, error: %v\n", err)
+		logger.Error("Some error occured when parse you data, error: %v\n", err)
 		return
 	}
 
@@ -128,14 +128,14 @@ func (up UserProcess) Login(userName, password string) (err error) {
 // 处理用户注册
 func (up UserProcess) Register(userName, password, password_confirm string) (err error) {
 	if password != password_confirm {
-		err = errors.New("confirm password not match")
+		err = errors.New("Confirm password not match")
 		return
 	}
 
 	conn, err := net.Dial("tcp", "localhost:8888")
 
 	if err != nil {
-		logger.Error("connect server error: %v", err)
+		logger.Error("Connect server error: %v", err)
 		return
 	}
 
@@ -150,7 +150,7 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 
 	data, err := json.Marshal(registerMessage)
 	if err != nil {
-		logger.Error("client soem error: %v\n", err)
+		logger.Error("Client soem error: %v\n", err)
 	}
 
 	// 构造需要传递给服务器的数据
@@ -159,14 +159,14 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 
 	data, err = json.Marshal(messsage)
 	if err != nil {
-		logger.Error("registerMessage json Marshal error: %v\n", err)
+		logger.Error("RegisterMessage json Marshal error: %v\n", err)
 		return
 	}
 
 	dispatcher := utils.Dispatcher{Conn: conn}
 	err = dispatcher.SendData(data)
 	if err != nil {
-		logger.Error("send data erro!\n")
+		logger.Error("Send data erro!\n")
 		return
 	}
 
