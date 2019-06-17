@@ -31,7 +31,7 @@ func showAfterLoginMenu() {
 		messageProcess := MessageProcess{}
 		err := messageProcess.GetOnlineUerList()
 		if err != nil {
-			logger.Error("Some error occured when get online user list, error: %v\n", err)
+			logger.Error("Some error occurred when get online user list, error: %v\n", err)
 		}
 		return
 	case 2:
@@ -41,7 +41,7 @@ func showAfterLoginMenu() {
 		messageProcess := MessageProcess{}
 		err := messageProcess.SendGroupMessageToServer(0, currentUser.UserName, content)
 		if err != nil {
-			logger.Error("Some error occured when send data to server: %v\n", err)
+			logger.Error("Some error occurred when send data to server: %v\n", err)
 		} else {
 			logger.Success("Send group message succeed!\n\n")
 		}
@@ -56,7 +56,7 @@ func showAfterLoginMenu() {
 		messageProcess := MessageProcess{}
 		conn, err := messageProcess.PointToPointCommunication(targetUserName, model.CurrentUser.UserName, message)
 		if err != nil {
-			logger.Error("Some error occured when point to point comunication: %v\n", err)
+			logger.Error("Some error occurred when point to point comunication: %v\n", err)
 			return
 		}
 
@@ -65,13 +65,13 @@ func showAfterLoginMenu() {
 		err = <-errMsg
 
 		if err.Error() != "<nil>" {
-			logger.Error("Send message errror: %v\n", err)
+			logger.Error("Send message error: %v\n", err)
 		}
 	case 4:
 		logger.Warn("Exit...\n")
 		os.Exit(0)
 	default:
-		logger.Info("Selected invalied!\n")
+		logger.Info("Selected invalid!\n")
 	}
 }
 
@@ -96,7 +96,7 @@ func (up UserProcess) Login(userName, password string) (err error) {
 	// 先序列话需要传到服务器的数据
 	data, err := json.Marshal(loginMessage)
 	if err != nil {
-		logger.Error("Some error occured when parse you data, error: %v\n", err)
+		logger.Error("Some error occurred when parse you data, error: %v\n", err)
 		return
 	}
 
@@ -150,7 +150,7 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 
 	data, err := json.Marshal(registerMessage)
 	if err != nil {
-		logger.Error("Client soem error: %v\n", err)
+		logger.Error("Client occurred some error: %v\n", err)
 	}
 
 	// 构造需要传递给服务器的数据
@@ -166,7 +166,7 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 	dispatcher := utils.Dispatcher{Conn: conn}
 	err = dispatcher.SendData(data)
 	if err != nil {
-		logger.Error("Send data erro!\n")
+		logger.Error("Send data error!\n")
 		return
 	}
 

@@ -137,7 +137,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 			err = showPointToPointMesssage(responseMsg)
 			errMsg <- err
 		default:
-			logger.Error("Unkown message type!")
+			logger.Error("Unknown message type!")
 		}
 
 		if err != nil {
