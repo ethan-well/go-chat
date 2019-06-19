@@ -35,8 +35,8 @@ func main() {
 
 	serverInfo := config.Configuration.ServerInfo
 	fmt.Println("serverInfo", serverInfo)
-	listenr, err := net.Listen("tcp", serverInfo.Host)
-	defer listenr.Close()
+	listener, err := net.Listen("tcp", serverInfo.Host)
+	defer listener.Close()
 	if err != nil {
 		fmt.Printf("some error when run server, error: %v", err)
 	}
