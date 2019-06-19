@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"go-chat/config"
 	"go-chat/server/model"
 	"go-chat/server/process"
 	"net"
@@ -10,7 +11,9 @@ import (
 
 func init() {
 	// 初始化 redis 连接池，全局唯一
-	initRedisPool(16, 0, time.Second*300, "127.0.0.1:6379")
+	redisInfo := config.Configuration.RedisInfo
+	fmt.Println("redisInfo", redisInfo)
+	initRedisPool(redisInfo.MaxIdle, redisInfo.MaxActive, time.Second*(redisInfo.IdleTimeout), redisInfo.Host)
 
 	// 创建 userDao 用于操作用户信息
 	// 全局唯一 UserDao 实例：model.CurrentUserDao
@@ -30,7 +33,9 @@ func dialogue(conn net.Conn) {
 func main() {
 	fmt.Printf("Server is already\n")
 
-	listenr, err := net.Listen("tcp", "0.0.0.0:8888")
+	serverInfo := config.Configuration.ServerInfo
+	fmt.Println("serverInfo", serverInfo)
+	listenr, err := net.Listen("tcp", serverInfo.Host)
 	defer listenr.Close()
 	if err != nil {
 		fmt.Printf("some error when run server, error: %v", err)
