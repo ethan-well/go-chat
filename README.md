@@ -19,6 +19,9 @@
 ├── common // 客户端和服务端公用代码，主要用来定义客户端和服务端之间通信约定的消息
 │   └── message
 │       └── message.go
+├── config // 配置信息
+│   ├── config.go
+│   └── config.json
 └── server // 服务端代码
     ├── main // 主函数
     │   ├── main.go
