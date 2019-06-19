@@ -8,6 +8,7 @@ import (
 	"go-chat/client/model"
 	"go-chat/client/utils"
 	common "go-chat/common/message"
+	"go-chat/config"
 	"net"
 	"os"
 )
@@ -78,7 +79,9 @@ func showAfterLoginMenu() {
 // 用户登陆
 func (up UserProcess) Login(userName, password string) (err error) {
 	// connect server
-	conn, err := net.Dial("tcp", "localhost:8888")
+
+	serverInfo := config.Configuration.ServerInfo
+	conn, err := net.Dial("tcp", serverInfo.Host)
 
 	if err != nil {
 		logger.Error("Connect server error: %v", err)
@@ -131,8 +134,8 @@ func (up UserProcess) Register(userName, password, passwordConfirm string) (err 
 		err = errors.New("confirm password not match")
 		return
 	}
-
-	conn, err := net.Dial("tcp", "localhost:8888")
+	serverInfo := config.Configuration.ServerInfo
+	conn, err := net.Dial("tcp", serverInfo.Host)
 
 	if err != nil {
 		logger.Error("Connect server error: %v", err)

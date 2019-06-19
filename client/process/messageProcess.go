@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"go-chat/client/utils"
 	common "go-chat/common/message"
+	"go-chat/config"
 	"net"
 )
 
@@ -12,7 +13,8 @@ type MessageProcess struct{}
 // user send message to server
 func (msgProc MessageProcess) SendGroupMessageToServer(groupID int, userName string, content string) (err error) {
 	// connect server
-	conn, err := net.Dial("tcp", "localhost:8888")
+	serverInfo := config.Configuration.ServerInfo
+	conn, err := net.Dial("tcp", serverInfo.Host)
 
 	if err != nil {
 		return
@@ -43,7 +45,8 @@ func (msgProc MessageProcess) SendGroupMessageToServer(groupID int, userName str
 
 // request all online user
 func (msg MessageProcess) GetOnlineUerList() (err error) {
-	conn, err := net.Dial("tcp", "localhost:8888")
+	serverInfo := config.Configuration.ServerInfo
+	conn, err := net.Dial("tcp", serverInfo.Host)
 	if err != nil {
 		return
 	}
@@ -83,7 +86,8 @@ func (msg MessageProcess) GetOnlineUerList() (err error) {
 }
 
 func (msgProc MessageProcess) PointToPointCommunication(targetUserName, sourceUserName, message string) (conn net.Conn, err error) {
-	conn, err = net.Dial("tcp", "localhost:8888")
+	serverInfo := config.Configuration.ServerInfo
+	conn, err = net.Dial("tcp", serverInfo.Host)
 	if err != nil {
 		return
 	}
