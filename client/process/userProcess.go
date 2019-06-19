@@ -126,9 +126,9 @@ func (up UserProcess) Login(userName, password string) (err error) {
 }
 
 // 处理用户注册
-func (up UserProcess) Register(userName, password, password_confirm string) (err error) {
-	if password != password_confirm {
-		err = errors.New("Confirm password not match")
+func (up UserProcess) Register(userName, password, passwordConfirm string) (err error) {
+	if password != passwordConfirm {
+		err = errors.New("confirm password not match")
 		return
 	}
 
@@ -140,13 +140,13 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 	}
 
 	// 定义消息
-	var messsage common.Message
+	var message common.Message
 
 	// 生成 registerMessage
 	var registerMessage common.RegisterMessage
 	registerMessage.UserName = userName
 	registerMessage.Password = password
-	registerMessage.PasswordConfirm = password_confirm
+	registerMessage.PasswordConfirm = passwordConfirm
 
 	data, err := json.Marshal(registerMessage)
 	if err != nil {
@@ -154,10 +154,10 @@ func (up UserProcess) Register(userName, password, password_confirm string) (err
 	}
 
 	// 构造需要传递给服务器的数据
-	messsage.Data = string(data)
-	messsage.Type = common.RegisterMessageType
+	message.Data = string(data)
+	message.Type = common.RegisterMessageType
 
-	data, err = json.Marshal(messsage)
+	data, err = json.Marshal(message)
 	if err != nil {
 		logger.Error("RegisterMessage json Marshal error: %v\n", err)
 		return

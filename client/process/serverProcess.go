@@ -111,7 +111,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 	dispatcher := utils.Dispatcher{Conn: conn}
 
 	for {
-		responseMsg, err = dispatcher.ReadDate()
+		responseMsg, err = dispatcher.ReadData()
 		if err != nil {
 			logger.Error("Waiting response error: %v\n", err)
 			return

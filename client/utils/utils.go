@@ -14,7 +14,7 @@ type Dispatcher struct {
 	Buf  [10240]byte
 }
 
-func (dispatcher Dispatcher) ReadDate() (msg common.ResponseMessage, err error) {
+func (dispatcher Dispatcher) ReadData() (msg common.ResponseMessage, err error) {
 	buf := make([]byte, 10240)
 
 	// 读取消息长度信息
@@ -40,7 +40,7 @@ func (dispatcher Dispatcher) ReadDate() (msg common.ResponseMessage, err error) 
 	// 从 conn 中解析消息并存放到 msg 中，此处一定传递的是 msg 的地址
 	err = json.Unmarshal(buf[:dataLen], &msg)
 	if err != nil {
-		logger.Error("json.Unmarshl error: %v", err)
+		logger.Error("json.Unmarshal error: %v", err)
 	}
 	return
 }
