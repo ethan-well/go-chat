@@ -12,7 +12,7 @@ func main() {
 		loop             = true
 		userName         string
 		password         string
-		password_confirm string
+		passwordConfirm string
 	)
 
 	for loop {
@@ -48,12 +48,12 @@ func main() {
 			logger.Notice("password：\n")
 			fmt.Scanf("%s\n", &password)
 			logger.Notice("password confirm：\n")
-			fmt.Scanf("%s\n", &password_confirm)
+			fmt.Scanf("%s\n", &passwordConfirm)
 
 			up := process.UserProcess{}
-			err := up.Register(userName, password, password_confirm)
+			err := up.Register(userName, password, passwordConfirm)
 			if err != nil {
-				logger.Error("Creae account failed: %v\n", err)
+				logger.Error("Create account failed: %v\n", err)
 			}
 		case 3:
 			logger.Warn("Exit...\n")

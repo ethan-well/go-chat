@@ -46,7 +46,7 @@ func (dispatcher Dispatcher) ReadData() (message common.Message, err error) {
 	return
 }
 
-func (dispatcher Dispatcher) WirteData(data []byte) (err error) {
+func (dispatcher Dispatcher) WriteData(data []byte) (err error) {
 	var dataLen uint32
 	dataLen = uint32(len(data))
 	var bytes [4]byte

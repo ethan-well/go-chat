@@ -30,8 +30,8 @@ func dialogue(conn net.Conn) {
 func main() {
 	fmt.Printf("Server is already\n")
 
-	listenr, err := net.Listen("tcp", "0.0.0.0:8888")
-	defer listenr.Close()
+	listener, err := net.Listen("tcp", "0.0.0.0:8888")
+	defer listener.Close()
 	if err != nil {
 		fmt.Printf("some error when run server, error: %v", err)
 	}
@@ -39,7 +39,7 @@ func main() {
 	for {
 		fmt.Printf("Waiting for client...\n")
 
-		conn, err := listenr.Accept()
+		conn, err := listener.Accept()
 		if err != nil {
 			fmt.Printf("some error when accept server, error: %v", err)
 		}

@@ -38,7 +38,7 @@ func (this *UserProcess) responseClient(responseMessageType string, code int, da
 
 	dispatcher := utils.Dispatcher{Conn: this.Conn}
 
-	err = dispatcher.WirteData(responseData)
+	err = dispatcher.WriteData(responseData)
 }
 
 func (this *UserProcess) UserRegister(message string) (err error) {
