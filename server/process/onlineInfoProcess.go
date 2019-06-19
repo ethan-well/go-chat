@@ -23,7 +23,7 @@ func (this OnlineInfoProcess) showAllOnlineUserList() (err error) {
 		if err != nil {
 			continue
 		}
-		userInfo := UserInfo{user.ID, user.Name}
+		userInfo := UserInfo{ID: user.ID, UserName: user.Name}
 		onlineUserList = append(onlineUserList, userInfo)
 	}
 
