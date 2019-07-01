@@ -15,7 +15,7 @@ type Processor struct {
 
 // 处理消息
 // 根据消息的类型，使用对应的处理方式
-func (this *Processor) messgeProcess(message common.Message) (err error) {
+func (this *Processor) messageProcess(message common.Message) (err error) {
 	switch message.Type {
 	case common.LoginMessageType:
 		up := UserProcess{Conn: this.Conn}
@@ -37,7 +37,7 @@ func (this *Processor) messgeProcess(message common.Message) (err error) {
 		olP := OnlineInfoProcess{this.Conn}
 		err = olP.showAllOnlineUserList()
 		if err != nil {
-			fmt.Println("get all online user list error: %v\n", err)
+			fmt.Printf("get all online user list error: %v\n", err)
 		}
 	case common.PointToPointMessageType:
 		fmt.Println("point to point comminite!")
@@ -81,7 +81,7 @@ func (this *Processor) MainProcess() {
 
 		// 处理来客户端的消息
 		// 按照消息的类型，使用不同的处理方法
-		err = this.messgeProcess(message)
+		err = this.messageProcess(message)
 		if err != nil {
 			fmt.Printf("some error: %v\n", err)
 			break

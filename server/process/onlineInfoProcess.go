@@ -23,7 +23,7 @@ func (this OnlineInfoProcess) showAllOnlineUserList() (err error) {
 		if err != nil {
 			continue
 		}
-		userInfo := UserInfo{user.ID, user.Name}
+		userInfo := UserInfo{ID: user.ID, UserName: user.Name}
 		onlineUserList = append(onlineUserList, userInfo)
 	}
 
@@ -57,7 +57,7 @@ func responseClient(conn net.Conn, code int, data string, errMsg string) (err er
 
 	dispatcher := utils.Dispatcher{Conn: conn}
 
-	err = dispatcher.WirteData(responseData)
+	err = dispatcher.WriteData(responseData)
 	if err != nil {
 		fmt.Printf("some error: %v", err)
 	}

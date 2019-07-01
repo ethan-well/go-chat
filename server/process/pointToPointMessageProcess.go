@@ -47,7 +47,7 @@ func (this PointToPointMessageProcess) sendMessageToTargetUser(message string) (
 	}
 
 	dispatcher := utils.Dispatcher{Conn: conn}
-	err = dispatcher.WirteData(responseData)
+	err = dispatcher.WriteData(responseData)
 
 	return
 }
@@ -66,7 +66,7 @@ func (this *PointToPointMessageProcess) responseClient(conn net.Conn, code int, 
 	}
 
 	dispatcher := utils.Dispatcher{Conn: conn}
-	err = dispatcher.WirteData(responseData)
+	err = dispatcher.WriteData(responseData)
 
 	return
 }

@@ -88,7 +88,7 @@ func showAllOnlineUsersList(responseMsg common.ResponseMessage) (err error) {
 	return
 }
 
-func showPointToPointMesssage(responseMsg common.ResponseMessage) (err error) {
+func showPointToPointMessage(responseMsg common.ResponseMessage) (err error) {
 	if responseMsg.Code != 200 {
 		err = errors.New(responseMsg.Error)
 		return
@@ -111,7 +111,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 	dispatcher := utils.Dispatcher{Conn: conn}
 
 	for {
-		responseMsg, err = dispatcher.ReadDate()
+		responseMsg, err = dispatcher.ReadData()
 		if err != nil {
 			logger.Error("Waiting response error: %v\n", err)
 			return
@@ -134,7 +134,7 @@ func Response(conn net.Conn, errMsg chan error) (err error) {
 			err = showAllOnlineUsersList(responseMsg)
 			errMsg <- err
 		case common.PointToPointMessageType:
-			err = showPointToPointMesssage(responseMsg)
+			err = showPointToPointMessage(responseMsg)
 			errMsg <- err
 		default:
 			logger.Error("Unknown message type!")

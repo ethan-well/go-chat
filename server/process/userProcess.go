@@ -3,7 +3,7 @@ package process
 import (
 	"encoding/json"
 	"fmt"
-	common "go-chat/common/message"
+	"go-chat/common/message"
 	"go-chat/server/model"
 	"go-chat/server/utils"
 	"net"
@@ -38,7 +38,7 @@ func (this *UserProcess) responseClient(responseMessageType string, code int, da
 
 	dispatcher := utils.Dispatcher{Conn: this.Conn}
 
-	err = dispatcher.WirteData(responseData)
+	err = dispatcher.WriteData(responseData)
 }
 
 func (this *UserProcess) UserRegister(message string) (err error) {
@@ -83,7 +83,7 @@ func (this *UserProcess) UserLogin(message string) (err error) {
 		clientConn := model.ClientConn{}
 		clientConn.Save(user.ID, user.Name, this.Conn)
 
-		userInfo := common.UserInfo{user.ID, user.Name}
+		userInfo := common.UserInfo{ID: user.ID, UserName: user.Name}
 		info, _ := json.Marshal(userInfo)
 		data = string(info)
 	case model.ERROR_USER_DOES_NOT_EXIST:

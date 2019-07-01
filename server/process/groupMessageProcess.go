@@ -42,7 +42,7 @@ func (gmp GroupMessageProcess) sendToGroupUsers(message string) (err error) {
 
 		dispatcher := utils.Dispatcher{Conn: connInfo.Conn}
 
-		err = dispatcher.WirteData(data)
+		err = dispatcher.WriteData(data)
 		if err != nil {
 			fmt.Printf("conn err: %v\n", err)
 		} else {
