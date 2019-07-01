@@ -19,7 +19,7 @@ func (this OnlineInfoProcess) showAllOnlineUserList() (err error) {
 	var onlineUserList []UserInfo
 	var code int
 	for _, connInfo := range model.ClientConnsMap {
-		user, err := model.CurrentUserDao.GetUsrByUserName(connInfo.UserName)
+		user, err := model.CurrentUserDao.GetUserByUserName(connInfo.UserName)
 		if err != nil {
 			continue
 		}

@@ -30,7 +30,7 @@ func (cc ClientConn) Del(userConn net.Conn) {
 }
 
 func (cc ClientConn) SearchByUserName(userName string) (connInfo net.Conn, err error) {
-	user, err := CurrentUserDao.GetUsrByUserName(userName)
+	user, err := CurrentUserDao.GetUserByUserName(userName)
 	if err != nil {
 		return
 	}

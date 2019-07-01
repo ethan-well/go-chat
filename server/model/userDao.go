@@ -53,7 +53,7 @@ func (this *UserDao) GetUsrById(id int) (user User, err error) {
 // 根据用户 username 获取用户信息
 // 获取成功返回 user 信息，err nil
 // 获取失败返回 err，user 为 nil
-func (this *UserDao) GetUsrByUserName(userName string) (user User, err error) {
+func (this *UserDao) GetUserByUserName(userName string) (user User, err error) {
 	conn := this.pool.Get()
 	defer conn.Close()
 
@@ -80,7 +80,7 @@ func (this *UserDao) Register(userName, password, passwordConfirm string) (user 
 	}
 
 	// 保证用户名不重复
-	user, err = this.GetUsrByUserName(userName)
+	user, err = this.GetUserByUserName(userName)
 	if err == nil {
 		fmt.Printf("User already exists!\n")
 		err = ERROR_USER_ALREADY_EXISTS
@@ -110,7 +110,7 @@ func (this *UserDao) Register(userName, password, passwordConfirm string) (user 
 }
 
 func (this *UserDao) Login(userName, password string) (user User, err error) {
-	user, err = this.GetUsrByUserName(userName)
+	user, err = this.GetUserByUserName(userName)
 	if err != nil {
 		fmt.Printf("get user by id error: %v\n", err)
 		return
