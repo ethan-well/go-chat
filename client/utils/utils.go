@@ -55,14 +55,14 @@ func (dispatcher Dispatcher) SendData(data []byte) (err error) {
 	// 客户端发送消息长度
 	writeLen, err := dispatcher.Conn.Write(bytes[:])
 	if writeLen != 4 || err != nil {
-		logger.Error("send data to server error: %v", err)
+		logger.Error("send data length to server error: %v", err)
 		return
 	}
 
 	//客户端发送消息本身
 	writeLen, err = dispatcher.Conn.Write(data)
 	if err != nil {
-		logger.Error("send data length to server error: %v", err)
+		logger.Error("send data to server error: %v", err)
 		return
 	}
 	return
