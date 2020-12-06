@@ -59,8 +59,8 @@ go build -o server go-chat/server/main
 ```
 #### 编译并运行客户端代码
 ```
-go build -o server go-chat/client
-./server
+go build -o client go-chat/client
+./client
 ```
 
 这样就大功告成，你就可以在本地体验本项目了。
