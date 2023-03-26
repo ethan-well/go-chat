@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"go-chat/config"
-	"go-chat/server/model"
-	"go-chat/server/process"
+	"gochat/config"
+	"gochat/server/model"
+	"gochat/server/process"
 	"net"
 	"time"
 )

@@ -2,9 +2,9 @@ package process
 
 import (
 	"fmt"
-	common "go-chat/common/message"
-	"go-chat/server/model"
-	"go-chat/server/utils"
+	common "gochat/common/message"
+	"gochat/server/model"
+	"gochat/server/utils"
 	"io"
 	"net"
 )

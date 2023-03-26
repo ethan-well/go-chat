@@ -54,12 +54,12 @@ git clone git@github.com:ItsWewin/go-chat.git
 ### 编译和运行
 #### 编译并运行服务端代码
 ```
-go build -o server go-chat/server/main
+go build -o server gochat/server/main
 ./server
 ```
 #### 编译并运行客户端代码
 ```
-go build -o client go-chat/client
+go build -o client gochat/client
 ./client
 ```
 
@@ -107,13 +107,13 @@ git clone git@github.com:ItsWewin/go-chat.git
 ### build server and run it
 
 ```
-go build -o server go-chat/server/main
+go build -o server gochat/server/main
 ./server
 ```
 
 ### build client and run it
 ```
-go build -o client go-chat/client
+go build -o client gochat/client
 ./client
 ```
 

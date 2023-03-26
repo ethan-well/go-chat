@@ -3,9 +3,9 @@ package process
 import (
 	"encoding/json"
 	"fmt"
-	"go-chat/common/message"
-	"go-chat/server/model"
-	"go-chat/server/utils"
+	"gochat/common/message"
+	"gochat/server/model"
+	"gochat/server/utils"
 	"net"
 )
 

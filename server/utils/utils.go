@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	common "go-chat/common/message"
+	common "gochat/common/message"
 	"net"
 )
 

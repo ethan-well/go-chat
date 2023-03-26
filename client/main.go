@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
-	"go-chat/client/logger"
-	"go-chat/client/process"
+	"gochat/client/logger"
+	"gochat/client/process"
 )
 
 func main() {
 	var (
-		key              int
-		loop             = true
-		userName         string
-		password         string
+		key             int
+		loop            = true
+		userName        string
+		password        string
 		passwordConfirm string
 	)
 
